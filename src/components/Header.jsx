@@ -48,7 +48,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="flex items-center space-x-8">
             <Link 
               to="/" 
               className={`relative font-medium transition-all duration-300 group ${
@@ -104,7 +104,7 @@ const Header = () => {
           </nav>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
             <Link 
               to="tel:+971501234567" 
               className={`flex items-center space-x-2 font-medium transition-all duration-300 ${
@@ -126,7 +126,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="lg:hidden p-2 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+            className="hidden p-2 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className={`w-6 h-6 transition-colors duration-300 ${
@@ -143,7 +143,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden py-6 border-t border-white/10 bg-white/95 backdrop-blur-md rounded-b-2xl mt-4 shadow-luxury">
+          <div className="hidden py-6 border-t border-white/10 bg-white/95 backdrop-blur-md rounded-b-2xl mt-4 shadow-luxury">
             <nav className="flex flex-col space-y-6">
               <Link 
                 to="/" 

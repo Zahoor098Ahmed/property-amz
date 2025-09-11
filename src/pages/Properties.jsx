@@ -14,7 +14,7 @@ const Properties = () => {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [likedProperties, setLikedProperties] = useState(new Set())
+  // Removed likedProperties state
 
   const openPropertyDetail = (property) => {
     setSelectedProperty(property)
@@ -26,18 +26,7 @@ const Properties = () => {
     setIsModalOpen(false)
   }
 
-  const handleLike = (e, propertyId) => {
-    e.stopPropagation()
-    setLikedProperties(prev => {
-      const newLiked = new Set(prev)
-      if (newLiked.has(propertyId)) {
-        newLiked.delete(propertyId)
-      } else {
-        newLiked.add(propertyId)
-      }
-      return newLiked
-    })
-  }
+  // Removed handleLike function
 
   const handleShare = (e, property) => {
     e.stopPropagation()
@@ -64,7 +53,7 @@ const Properties = () => {
         setError(null)
         const response = await apiService.getProperties()
         if (response.success && response.data) {
-          setProperties(response.data)
+          setProperties(Array.isArray(response.data) ? response.data : [])
         } else {
           setError('Failed to fetch properties')
         }
@@ -81,7 +70,7 @@ const Properties = () => {
 
   // Properties data will be fetched from API
 
-  const filteredProperties = properties.filter(property => {
+  const filteredProperties = Array.isArray(properties) ? properties.filter(property => {
     const typeMatch = filter === 'all' || property.type === filter
     const locationMatch = locationFilter === 'all' || property.location === locationFilter
     const projectMatch = projectFilter === 'all' || (property.projectName && property.projectName === projectFilter)
@@ -104,13 +93,13 @@ const Properties = () => {
     }
     
     return typeMatch && locationMatch && projectMatch && searchMatch && priceMatch
-  })
+  }) : []
 
-  const uniqueLocations = [...new Set(properties.map(property => property.location))]
-  const uniqueProjects = [...new Set(properties.map(property => property.projectName))]
+  const uniqueLocations = [...new Set(Array.isArray(properties) ? properties.map(property => property.location) : [])]
+  const uniqueProjects = [...new Set(Array.isArray(properties) ? properties.map(property => property.projectName) : [])]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-black to-dark-900">
       {/* Hero Header */}
       <section className="relative py-32 bg-gradient-to-r from-dark-900 via-luxury-900 to-dark-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-luxury-600/20 to-gold-600/20"></div>
@@ -136,19 +125,19 @@ const Properties = () => {
       </section>
 
       {/* Advanced Filters */}
-      <section className="py-8 bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-20 z-40">
+      <section className="py-8 bg-black/90 backdrop-blur-sm border-b border-gold-500/20 sticky top-20 z-40">
         <div className="container mx-auto px-4">
           <div className="flex flex-col gap-6">
             {/* Search Bar */}
-            <div className="w-full">
-              <label className="block text-sm font-medium text-dark-700 mb-2">Search by Project Name or Location</label>
+            <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Search by Project Name or Location</label>
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Enter project name or location..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 pl-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-luxury-600 focus:border-transparent text-lg"
+                  className="w-full px-6 py-4 pl-12 bg-dark-800 border border-gold-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 text-lg text-white placeholder-gray-400"
                 />
                 <svg className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -160,7 +149,7 @@ const Properties = () => {
             <div className="flex flex-wrap gap-4 items-center justify-between">
               <div className="flex flex-wrap gap-4 items-center">
                 <div className="relative">
-                  <label className="block text-sm font-medium text-dark-700 mb-2">Property Type</label>
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Property Type</label>
                   <select 
                     value={filter} 
                     onChange={(e) => setFilter(e.target.value)}
@@ -176,7 +165,7 @@ const Properties = () => {
                 </div>
                 
                 <div className="relative">
-                  <label className="block text-sm font-medium text-dark-700 mb-2">Location</label>
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Location</label>
                   <select 
                     value={locationFilter} 
                     onChange={(e) => setLocationFilter(e.target.value)}
@@ -190,7 +179,7 @@ const Properties = () => {
                 </div>
                 
                 <div className="relative">
-                  <label className="block text-sm font-medium text-dark-700 mb-2">Project</label>
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Project</label>
                   <select 
                     value={projectFilter} 
                     onChange={(e) => setProjectFilter(e.target.value)}
@@ -204,7 +193,7 @@ const Properties = () => {
                 </div>
                 
                 <div className="relative">
-                  <label className="block text-sm font-medium text-dark-700 mb-2">Price Range</label>
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Price Range</label>
                   <select 
                     value={priceRange} 
                     onChange={(e) => setPriceRange(e.target.value)}
@@ -229,15 +218,15 @@ const Properties = () => {
               </div>
             
               <div className="flex items-center gap-4">
-              <div className="text-dark-600 font-medium">
+              <div className="text-gray-300 font-medium">
                 {filteredProperties.length} of {properties.length} properties
               </div>
               
-              <div className="flex bg-gray-100 rounded-lg p-1">
+              <div className="flex bg-dark-700 rounded-lg p-1">
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded transition-colors ${
-                    viewMode === 'grid' ? 'bg-white shadow-sm text-luxury-600' : 'text-gray-600 hover:text-luxury-600'
+                    viewMode === 'grid' ? 'bg-gold-500 shadow-sm text-black' : 'text-gray-400 hover:text-gold-400'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -247,7 +236,7 @@ const Properties = () => {
                 <button
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded transition-colors ${
-                    viewMode === 'list' ? 'bg-white shadow-sm text-luxury-600' : 'text-gray-600 hover:text-luxury-600'
+                    viewMode === 'list' ? 'bg-gold-500 shadow-sm text-black' : 'text-gray-400 hover:text-gold-400'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -266,9 +255,9 @@ const Properties = () => {
         <div className="container mx-auto px-4">
           {loading ? (
             <div className="text-center py-20">
-              <div className="w-16 h-16 border-4 border-luxury-200 border-t-luxury-600 rounded-full animate-spin mx-auto mb-8"></div>
-              <h3 className="text-2xl font-bold text-dark-800 mb-4 font-serif">Loading Properties...</h3>
-              <p className="text-dark-600">Please wait while we fetch the latest luxury properties for you.</p>
+              <div className="w-16 h-16 border-4 border-gold-200 border-t-gold-500 rounded-full animate-spin mx-auto mb-8"></div>
+              <h3 className="text-2xl font-bold text-white mb-4 font-serif">Loading Properties...</h3>
+              <p className="text-gray-300">Please wait while we fetch the latest luxury properties for you.</p>
             </div>
           ) : error ? (
             <div className="text-center py-20">
@@ -277,8 +266,8 @@ const Properties = () => {
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 className="text-3xl font-bold text-dark-800 mb-4 font-serif">Error Loading Properties</h3>
-              <p className="text-xl text-dark-600 mb-8 max-w-md mx-auto">{error}</p>
+              <h3 className="text-3xl font-bold text-white mb-4 font-serif">Error Loading Properties</h3>
+              <p className="text-xl text-gray-300 mb-8 max-w-md mx-auto">{error}</p>
               <button 
                 onClick={() => window.location.reload()}
                 className="btn-primary btn-lg"
@@ -293,8 +282,8 @@ const Properties = () => {
                   <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 className="text-3xl font-bold text-dark-800 mb-4 font-serif">No Properties Found</h3>
-              <p className="text-xl text-dark-600 mb-8 max-w-md mx-auto">Adjust your search criteria to discover more luxury properties.</p>
+              <h3 className="text-3xl font-bold text-white mb-4 font-serif">No Properties Found</h3>
+              <p className="text-xl text-gray-300 mb-8 max-w-md mx-auto">Adjust your search criteria to discover more luxury properties.</p>
               <button 
                 onClick={() => { setFilter('all'); setPriceRange('all'); }}
                 className="btn-primary btn-lg"
@@ -307,7 +296,7 @@ const Properties = () => {
               {filteredProperties.map((property, index) => (
                 <div 
                   key={property.id} 
-                  className={`group relative bg-white rounded-2xl overflow-hidden shadow-luxury hover:shadow-gold transition-all duration-500 transform hover:-translate-y-2 animate-fade-in cursor-pointer ${
+                  className={`group relative bg-dark-800 border border-gold-500/20 rounded-2xl overflow-hidden shadow-luxury hover:shadow-gold transition-all duration-500 transform hover:-translate-y-2 animate-fade-in cursor-pointer ${
                     viewMode === 'list' ? 'flex flex-col md:flex-row' : ''
                   }`}
                   style={{animationDelay: `${index * 0.1}s`}}
@@ -335,18 +324,6 @@ const Properties = () => {
                     
                     <div className="absolute top-6 right-6 flex gap-2">
                       <button 
-                        onClick={(e) => handleLike(e, property.id)}
-                        className={`w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-300 ${
-                          likedProperties.has(property.id) 
-                            ? 'bg-red-500/80 text-white scale-110' 
-                            : 'bg-white/20 text-white hover:bg-white/30'
-                        }`}
-                      >
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                      <button 
                         onClick={(e) => handleShare(e, property)}
                         className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
                       >
@@ -368,36 +345,36 @@ const Properties = () => {
                   }`}>
                     <div>
                       <div className="mb-4">
-                        <span className="text-luxury-600 text-sm font-medium tracking-wider uppercase">
+                        <span className="text-gold-400 text-sm font-medium tracking-wider uppercase">
                           {property.location}
                         </span>
                       </div>
-                      <h3 className="text-2xl font-bold text-dark-800 mb-3 font-serif group-hover:text-luxury-600 transition-colors">
+                      <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors">
                         {property.title}
                       </h3>
-                      <p className="text-dark-600 mb-6 leading-relaxed">
+                      <p className="text-gray-300 mb-6 leading-relaxed">
                         {property.description}
                       </p>
                       
                       <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="text-center p-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                          <div className="text-lg font-bold text-dark-800">{property.bedrooms}</div>
-                          <div className="text-sm text-dark-600">Bedrooms</div>
+                        <div className="text-center p-3 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                          <div className="text-lg font-bold text-white">{property.bedrooms}</div>
+                          <div className="text-sm text-gray-300">Bedrooms</div>
                         </div>
-                        <div className="text-center p-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                          <div className="text-lg font-bold text-dark-800">{property.bathrooms}</div>
-                          <div className="text-sm text-dark-600">Bathrooms</div>
+                        <div className="text-center p-3 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                          <div className="text-lg font-bold text-white">{property.bathrooms}</div>
+                          <div className="text-sm text-gray-300">Bathrooms</div>
                         </div>
-                        <div className="text-center p-3 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                          <div className="text-lg font-bold text-dark-800">{property.areaFormatted || property.area}</div>
-                          <div className="text-sm text-dark-600">Area</div>
+                        <div className="text-center p-3 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                          <div className="text-lg font-bold text-white">{property.areaFormatted || property.area}</div>
+                          <div className="text-sm text-gray-300">Area</div>
                         </div>
                       </div>
                     </div>
                     
                     <div className="flex justify-between items-center">
                       <div>
-                        <div className="text-3xl font-bold text-luxury-600 font-serif">{property.priceFormatted || `AED ${property.price?.toLocaleString()}`}</div>
+                        <div className="text-3xl font-bold text-gold-400 font-serif">{property.priceFormatted || `AED ${property.price?.toLocaleString()}`}</div>
                       </div>
                       <div className="flex gap-3">
                         <button 
@@ -448,22 +425,23 @@ const Properties = () => {
 
       {/* Property Detail Modal */}
       {isModalOpen && selectedProperty && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="relative">
-              <button
-                onClick={closePropertyDetail}
-                className="absolute top-4 right-4 z-10 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-dark-800 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-gold-500/20 relative overflow-hidden">
+          <button
+              onClick={closePropertyDetail}
+              className="absolute top-4 right-4 z-50 w-12 h-12 bg-red-600/90 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-red-700 transition-all duration-300 border-2 border-white/20 shadow-lg hover:scale-110"
+              style={{position: 'sticky', top: '16px', right: '16px', marginLeft: 'auto'}}
+            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div className="relative">
               
               <img
                 src={selectedProperty.images && selectedProperty.images[0] ? selectedProperty.images[0] : selectedProperty.image}
                 alt={selectedProperty.title}
-                className="w-full h-80 object-cover"
+                className="w-full h-80 object-cover rounded-t-2xl"
               />
               
               <div className="absolute bottom-6 left-6">
@@ -483,72 +461,72 @@ const Properties = () => {
             
             <div className="p-8">
               <div className="mb-6">
-                <span className="text-luxury-600 text-sm font-medium tracking-wider uppercase">
+                <span className="text-gold-400 text-sm font-medium tracking-wider uppercase">
                   {selectedProperty.location}
                 </span>
-                <h2 className="text-4xl font-bold text-dark-800 mb-4 font-serif">
+                <h2 className="text-4xl font-bold text-white mb-4 font-serif">
                   {selectedProperty.title}
                 </h2>
-                <div className="text-4xl font-bold text-luxury-600 font-serif mb-6">
+                <div className="text-4xl font-bold text-gold-400 font-serif mb-6">
                   {selectedProperty.priceFormatted || `AED ${selectedProperty.price?.toLocaleString()}`}
                 </div>
               </div>
               
               <div className="grid grid-cols-3 gap-6 mb-8">
-                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                  <div className="text-2xl font-bold text-dark-800">{selectedProperty.bedrooms}</div>
-                  <div className="text-sm text-dark-600">Bedrooms</div>
+                <div className="text-center p-4 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                  <div className="text-2xl font-bold text-white">{selectedProperty.bedrooms}</div>
+                  <div className="text-sm text-gray-300">Bedrooms</div>
                 </div>
-                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                  <div className="text-2xl font-bold text-dark-800">{selectedProperty.bathrooms}</div>
-                  <div className="text-sm text-dark-600">Bathrooms</div>
+                <div className="text-center p-4 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                  <div className="text-2xl font-bold text-white">{selectedProperty.bathrooms}</div>
+                  <div className="text-sm text-gray-300">Bathrooms</div>
                 </div>
-                <div className="text-center p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl">
-                  <div className="text-2xl font-bold text-dark-800">{selectedProperty.areaFormatted || selectedProperty.area}</div>
-                  <div className="text-sm text-dark-600">Area</div>
+                <div className="text-center p-4 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
+                  <div className="text-2xl font-bold text-white">{selectedProperty.areaFormatted || selectedProperty.area}</div>
+                  <div className="text-sm text-gray-300">Area</div>
                 </div>
               </div>
               
               <div className="mb-8">
-                <h3 className="text-2xl font-bold text-dark-800 mb-4 font-serif">Property Description</h3>
-                <p className="text-dark-600 leading-relaxed mb-4">{selectedProperty.description}</p>
+                <h3 className="text-2xl font-bold text-white mb-4 font-serif">Property Description</h3>
+                <p className="text-gray-300 leading-relaxed mb-4">{selectedProperty.description}</p>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div>
-                  <h4 className="text-xl font-bold text-dark-800 mb-4">Property Details</h4>
+                  <h4 className="text-xl font-bold text-white mb-4">Property Details</h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Year Built:</span>
-                      <span className="font-medium">{selectedProperty.yearBuilt || 'N/A'}</span>
+                      <span className="text-gray-300">Year Built:</span>
+                      <span className="font-medium text-white">{selectedProperty.yearBuilt || 'N/A'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Property Type:</span>
-                      <span className="font-medium">{selectedProperty.type || 'N/A'}</span>
+                      <span className="text-gray-300">Property Type:</span>
+                      <span className="font-medium text-white">{selectedProperty.type || 'N/A'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Furnishing:</span>
-                      <span className="font-medium">{selectedProperty.furnished ? 'Furnished' : 'Unfurnished'}</span>
+                      <span className="text-gray-300">Furnishing:</span>
+                      <span className="font-medium text-white">{selectedProperty.furnished ? 'Furnished' : 'Unfurnished'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Status:</span>
-                      <span className="font-medium">{selectedProperty.status || 'Available'}</span>
+                      <span className="text-gray-300">Status:</span>
+                      <span className="font-medium text-white">{selectedProperty.status || 'Available'}</span>
                     </div>
                   </div>
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-dark-800 mb-4">Contact Agent</h4>
-                  <div className="bg-gradient-to-br from-luxury-50 to-gold-50 p-6 rounded-xl">
-                    <div className="text-lg font-bold text-dark-800 mb-2">AMZ Properties Agent</div>
+                  <h4 className="text-xl font-bold text-white mb-4">Contact Agent</h4>
+                  <div className="bg-gradient-to-br from-dark-700 to-dark-600 p-6 rounded-xl border border-gold-500/20">
+                    <div className="text-lg font-bold text-white mb-2">AMZ Properties Agent</div>
                     <div className="space-y-2">
-                      <a href="tel:+971-4-123-4567" className="flex items-center text-luxury-600 hover:text-luxury-700">
+                      <a href="tel:+971-4-123-4567" className="flex items-center text-gold-400 hover:text-gold-300">
                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                         </svg>
                         +971 4 123 4567
                       </a>
-                      <a href="mailto:info@amzproperties.com" className="flex items-center text-luxury-600 hover:text-luxury-700">
+                      <a href="mailto:info@amzproperties.com" className="flex items-center text-gold-400 hover:text-gold-300">
                         <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
@@ -565,11 +543,11 @@ const Properties = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="text-xl font-bold text-dark-800 mb-4">Features</h4>
+                  <h4 className="text-xl font-bold text-white mb-4">Features</h4>
                   <ul className="space-y-2">
                     {selectedProperty.features && selectedProperty.features.map((feature, index) => (
-                      <li key={index} className="flex items-center text-dark-600">
-                        <svg className="w-4 h-4 mr-2 text-luxury-600" fill="currentColor" viewBox="0 0 20 20">
+                      <li key={`feature-${index}`} className="flex items-center text-gray-300">
+                        <svg className="w-4 h-4 mr-2 text-gold-400" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                         {feature}
@@ -579,19 +557,19 @@ const Properties = () => {
                 </div>
                 
                 <div>
-                  <h4 className="text-xl font-bold text-dark-800 mb-4">Property Information</h4>
+                  <h4 className="text-xl font-bold text-white mb-4">Property Information</h4>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Featured:</span>
-                      <span className="font-medium">{selectedProperty.featured ? 'Yes' : 'No'}</span>
+                      <span className="text-gray-300">Featured:</span>
+                      <span className="font-medium text-white">{selectedProperty.featured ? 'Yes' : 'No'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Created:</span>
-                      <span className="font-medium">{selectedProperty.createdAt ? new Date(selectedProperty.createdAt).toLocaleDateString() : 'N/A'}</span>
+                      <span className="text-gray-300">Created:</span>
+                      <span className="font-medium text-white">{selectedProperty.createdAt ? new Date(selectedProperty.createdAt).toLocaleDateString() : 'N/A'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-dark-600">Coordinates:</span>
-                      <span className="font-medium">{selectedProperty.coordinates ? `${selectedProperty.coordinates.lat}, ${selectedProperty.coordinates.lng}` : 'N/A'}</span>
+                      <span className="text-gray-300">Coordinates:</span>
+                      <span className="font-medium text-white">{selectedProperty.coordinates ? `${selectedProperty.coordinates.lat}, ${selectedProperty.coordinates.lng}` : 'N/A'}</span>
                     </div>
                   </div>
                 </div>
