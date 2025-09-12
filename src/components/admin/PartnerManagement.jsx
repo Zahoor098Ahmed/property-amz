@@ -32,20 +32,13 @@ const PartnerManagement = () => {
     featured: false,
     rating: 0,
     logo: null,
-    logoUrl: '',
     coverImage: null,
-    coverImageUrl: '',
     socialMedia: {
       linkedin: '',
       twitter: '',
       facebook: '',
       instagram: ''
     }
-  })
-  
-  const [imageUploadType, setImageUploadType] = useState({
-    logo: 'file', // 'file' or 'url'
-    coverImage: 'file' // 'file' or 'url'
   })
 
   useEffect(() => {
@@ -98,12 +91,6 @@ const PartnerManagement = () => {
       // Add basic fields
       Object.keys(formData).forEach(key => {
         if (key === 'logo' || key === 'coverImage') {
-          // Handle file uploads
-          if (formData[key]) {
-            submitData.append(key, formData[key])
-          }
-        } else if (key === 'logoUrl' || key === 'coverImageUrl') {
-          // Handle URL fields
           if (formData[key]) {
             submitData.append(key, formData[key])
           }
@@ -115,9 +102,6 @@ const PartnerManagement = () => {
           submitData.append(key, formData[key])
         }
       })
-      
-      // Add image upload type information
-      submitData.append('imageUploadType', JSON.stringify(imageUploadType))
 
       let response
       if (editingPartner) {
@@ -168,9 +152,7 @@ const PartnerManagement = () => {
       featured: partner.featured,
       rating: partner.rating || 0,
       logo: null,
-      logoUrl: partner.logoUrl || '',
       coverImage: null,
-      coverImageUrl: partner.coverImageUrl || '',
       socialMedia: partner.socialMedia || {
         linkedin: '',
         twitter: '',
@@ -178,13 +160,6 @@ const PartnerManagement = () => {
         instagram: ''
       }
     })
-    
-    // Set image upload type based on existing data
-    setImageUploadType({
-      logo: partner.logoUrl ? 'url' : 'file',
-      coverImage: partner.coverImageUrl ? 'url' : 'file'
-    })
-    
     setShowForm(true)
   }
 
@@ -238,21 +213,13 @@ const PartnerManagement = () => {
       featured: false,
       rating: 0,
       logo: null,
-      logoUrl: '',
       coverImage: null,
-      coverImageUrl: '',
       socialMedia: {
         linkedin: '',
         twitter: '',
         facebook: '',
         instagram: ''
       }
-    })
-    
-    // Reset image upload type to default
-    setImageUploadType({
-      logo: 'file',
-      coverImage: 'file'
     })
   }
 
@@ -597,111 +564,31 @@ const PartnerManagement = () => {
             <div className="border-b border-yellow-400/30 pb-6">
               <h4 className="text-md font-medium text-yellow-300 mb-4">Images</h4>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Logo Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-yellow-300 mb-2">
+                  <label className="block text-sm font-medium text-yellow-300 mb-1">
                     Logo
                   </label>
-                  
-                  {/* Upload Type Toggle */}
-                  <div className="flex mb-3 bg-gray-900/30 rounded-lg p-1">
-                    <button
-                      type="button"
-                      onClick={() => setImageUploadType(prev => ({ ...prev, logo: 'file' }))}
-                      className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                        imageUploadType.logo === 'file'
-                          ? 'bg-yellow-400 text-gray-900'
-                          : 'text-yellow-300 hover:text-yellow-100'
-                      }`}
-                    >
-                      Upload File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setImageUploadType(prev => ({ ...prev, logo: 'url' }))}
-                      className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                        imageUploadType.logo === 'url'
-                          ? 'bg-yellow-400 text-gray-900'
-                          : 'text-yellow-300 hover:text-yellow-100'
-                      }`}
-                    >
-                      Image URL
-                    </button>
-                  </div>
-                  
-                  {/* File Upload or URL Input */}
-                  {imageUploadType.logo === 'file' ? (
-                    <input
-                      type="file"
-                      name="logo"
-                      onChange={handleInputChange}
-                      accept="image/*"
-                      className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-xl px-4 py-3 text-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300 backdrop-blur-sm"
-                    />
-                  ) : (
-                    <input
-                      type="url"
-                      name="logoUrl"
-                      value={formData.logoUrl}
-                      onChange={handleInputChange}
-                      placeholder="https://example.com/logo.png"
-                      className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-xl px-4 py-3 text-yellow-100 placeholder-yellow-300/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300 backdrop-blur-sm"
-                    />
-                  )}
+                  <input
+                    type="file"
+                    name="logo"
+                    onChange={handleInputChange}
+                    accept="image/*"
+                    className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-xl px-4 py-3 text-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300 backdrop-blur-sm"
+                  />
                 </div>
                 
-                {/* Cover Image Section */}
                 <div>
-                  <label className="block text-sm font-medium text-yellow-300 mb-2">
+                  <label className="block text-sm font-medium text-yellow-300 mb-1">
                     Cover Image
                   </label>
-                  
-                  {/* Upload Type Toggle */}
-                  <div className="flex mb-3 bg-gray-900/30 rounded-lg p-1">
-                    <button
-                      type="button"
-                      onClick={() => setImageUploadType(prev => ({ ...prev, coverImage: 'file' }))}
-                      className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                        imageUploadType.coverImage === 'file'
-                          ? 'bg-yellow-400 text-gray-900'
-                          : 'text-yellow-300 hover:text-yellow-100'
-                      }`}
-                    >
-                      Upload File
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setImageUploadType(prev => ({ ...prev, coverImage: 'url' }))}
-                      className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
-                        imageUploadType.coverImage === 'url'
-                          ? 'bg-yellow-400 text-gray-900'
-                          : 'text-yellow-300 hover:text-yellow-100'
-                      }`}
-                    >
-                      Image URL
-                    </button>
-                  </div>
-                  
-                  {/* File Upload or URL Input */}
-                  {imageUploadType.coverImage === 'file' ? (
-                    <input
-                      type="file"
-                      name="coverImage"
-                      onChange={handleInputChange}
-                      accept="image/*"
-                      className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-xl px-4 py-3 text-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300 backdrop-blur-sm"
-                    />
-                  ) : (
-                    <input
-                      type="url"
-                      name="coverImageUrl"
-                      value={formData.coverImageUrl}
-                      onChange={handleInputChange}
-                      placeholder="https://example.com/cover-image.jpg"
-                      className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-xl px-4 py-3 text-yellow-100 placeholder-yellow-300/50 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition-all duration-300 backdrop-blur-sm"
-                    />
-                  )}
+                  <input
+                    type="file"
+                    name="coverImage"
+                    onChange={handleInputChange}
+                    accept="image/*"
+                    className="w-full bg-gray-900/50 border border-yellow-400/30 rounded-md px-3 py-2 text-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  />
                 </div>
               </div>
             </div>
@@ -816,9 +703,9 @@ const PartnerManagement = () => {
                   <div className="flex flex-col h-full">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        {(partner.logo || partner.logoUrl) ? (
+                        {partner.logo ? (
                           <img
-                            src={partner.logoUrl || `http://localhost:5002${partner.logo}`}
+                            src={`http://localhost:5002${partner.logo}`}
                             alt={partner.name}
                             className="w-12 h-12 object-cover rounded-xl border border-yellow-400/20"
                           />

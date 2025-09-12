@@ -5,6 +5,8 @@ import PropertyManagement from '../../components/admin/PropertyManagement'
 import ContactManagement from '../../components/admin/ContactManagement'
 import BlogManagement from '../../components/admin/BlogManagement'
 import PartnerManagement from '../../components/admin/PartnerManagement'
+import ProjectManagement from '../../components/admin/ProjectManagement'
+import WishlistManagement from './WishlistManagement'
 import amzLogo from '../../assets/amz.logo.jpeg'
 
 const AdminDashboard = () => {
@@ -56,6 +58,24 @@ const AdminDashboard = () => {
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+        </svg>
+      )
+    },
+    { 
+      id: 'projects', 
+      label: 'Projects', 
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+      )
+    },
+    { 
+      id: 'wishlist', 
+      label: 'Wishlist', 
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
       )
     },
@@ -177,6 +197,8 @@ const AdminDashboard = () => {
             {/* Content Body */}
             <div className="p-8">
               {activeTab === 'properties' && <PropertyManagement />}
+              {activeTab === 'projects' && <ProjectManagement />}
+              {activeTab === 'wishlist' && <WishlistManagement />}
               {activeTab === 'contacts' && <ContactManagement />}
               {activeTab === 'blogs' && <BlogManagement />}
               {activeTab === 'partners' && <PartnerManagement />}

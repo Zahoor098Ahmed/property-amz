@@ -21,6 +21,16 @@ const Home = () => {
     experience: 0,
     awards: 0
   })
+  
+  // Mobile swipe functionality
+  const [touchStart, setTouchStart] = useState(null)
+  const [touchEnd, setTouchEnd] = useState(null)
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isManualSwipe, setIsManualSwipe] = useState(false)
+  
+  // Partner filtering functionality
+  const [selectedDeveloper, setSelectedDeveloper] = useState(null)
+  const [showDeveloperModal, setShowDeveloperModal] = useState(false)
   const [exclusiveProperties, setExclusiveProperties] = useState([])
   const [offPlanProperties, setOffPlanProperties] = useState([])
   const [partnerDevelopers, setPartnerDevelopers] = useState([])
@@ -211,7 +221,6 @@ const Home = () => {
 
   // Initialize static data and fetch partners
   useEffect(() => {
-    setTestimonials(staticTestimonials)
     setBlogPosts(staticBlogPosts)
     setServices(staticServices)
     
@@ -226,7 +235,7 @@ const Home = () => {
           const mappedPartners = response.partners.map(partner => ({
             id: partner._id,
             name: partner.name,
-            logo: partner.logoUrl || (partner.logo ? (partner.logo.startsWith('http') ? partner.logo : `http://localhost:5003${partner.logo}`) : ''),
+            logo: partner.logo.startsWith('http') ? partner.logo : `http://localhost:5002${partner.logo}`,
             projects: partner.totalProjects || 0,
             description: partner.description || 'Premium real estate developer',
             specialties: partner.specialties || ['Residential', 'Commercial']
@@ -246,23 +255,74 @@ const Home = () => {
       }
     }
     
+    // Fetch testimonials
+     const fetchTestimonials = async () => {
+       try {
+         const testimonialsResponse = await apiService.getTestimonials({ status: 'active' })
+         if (testimonialsResponse && testimonialsResponse.length > 0) {
+           const mappedTestimonials = testimonialsResponse.map(testimonial => ({
+             id: testimonial._id,
+             name: testimonial.name,
+             role: testimonial.role,
+             text: testimonial.text,
+             image: testimonial.image && testimonial.image.startsWith('http') ? testimonial.image : `http://localhost:5002${testimonial.image || '/uploads/default-avatar.png'}`,
+             rating: testimonial.rating
+           }))
+           setTestimonials(mappedTestimonials)
+         } else {
+           setTestimonials(staticTestimonials)
+         }
+       } catch (error) {
+         console.error('Error fetching testimonials:', error)
+         setTestimonials(staticTestimonials)
+       }
+     }
+     
+     // Fetch blog posts
+     const fetchBlogPosts = async () => {
+       try {
+         const blogsResponse = await apiService.getBlogs({ status: 'published', limit: 3 })
+         if (blogsResponse && blogsResponse.length > 0) {
+           const mappedBlogs = blogsResponse.map(blog => ({
+             id: blog._id,
+             title: blog.title,
+             excerpt: blog.excerpt || blog.content.substring(0, 150) + '...',
+             image: blog.featuredImage && blog.featuredImage.startsWith('http') ? blog.featuredImage : `http://localhost:5002${blog.featuredImage || '/uploads/default-blog.jpg'}`,
+             category: blog.category || 'Real Estate',
+             date: new Date(blog.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+             slug: blog.slug
+           }))
+           setBlogPosts(mappedBlogs)
+         } else {
+           setBlogPosts(staticBlogPosts)
+         }
+       } catch (error) {
+         console.error('Error fetching blog posts:', error)
+         setBlogPosts(staticBlogPosts)
+       }
+     }
+    
     fetchPartners()
+     fetchTestimonials()
+     fetchBlogPosts()
   }, [])
 
   // Auto-rotate testimonials
   useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % staticTestimonials.length)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [])
+    if (testimonials.length > 0) {
+      const interval = setInterval(() => {
+        setActiveTestimonial((prev) => (prev + 1) % testimonials.length)
+      }, 5000)
+      return () => clearInterval(interval)
+    }
+  }, [testimonials])
 
   // Fetch properties from API
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         // Add cache-busting parameter to prevent browser caching
-        const response = await fetch(`/api/properties?_=${new Date().getTime()}`)
+        const response = await fetch(`http://localhost:5002/api/properties?_=${new Date().getTime()}`)
         if (response.ok) {
           const result = await response.json()
           const data = result.success ? result.data : result
@@ -294,6 +354,36 @@ const Home = () => {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
+  const handleContactChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const contactData = {
+        name: formData.name,
+        email: formData.email,
+        phone: `${formData.countryCode} ${formData.phone}`,
+        message: formData.message,
+        source: 'Home Page Contact Form'
+      }
+      
+      const response = await apiService.submitContactForm(contactData)
+      
+      if (response.success) {
+        alert('Thank you for your message! We will get back to you soon.')
+        setFormData({ name: '', email: '', phone: '', countryCode: '+971', message: '' })
+      } else {
+        throw new Error(response.message || 'Failed to send message')
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      alert('Error sending message. Please try again later.')
+    }
+  }
+
   const handleFormSubmit = async (e) => {
     e.preventDefault()
     try {
@@ -312,9 +402,11 @@ const Home = () => {
     }
   }
 
-  const handleDeveloperClick = (developerId) => {
-    // Navigate to partner detail page using Link component
-    // This will be handled by the Link component in the JSX
+  const handleDeveloperClick = (developerId, developerName) => {
+    // Store selected developer for filtering
+    setSelectedDeveloper({ id: developerId, name: developerName })
+    // Navigate to properties page with developer filter
+    window.location.href = `/properties?developer=${encodeURIComponent(developerName)}`
   }
 
   const countryCodes = [
@@ -597,10 +689,9 @@ const Home = () => {
             <div className="flex animate-scroll-infinite space-x-8 hover:pause-animation">
               {/* First set of logos */}
               {partnerDevelopers.map((developer, index) => (
-                <Link 
+                <div 
                   key={`first-${developer.id}-${index}`}
-                  to={`/partner/${developer.id}`}
-                  onClick={() => window.scrollTo(0, 0)}
+                  onClick={() => handleDeveloperClick(developer.id, developer.name)}
                   className="flex-shrink-0 partner-logo-card sparkle-container p-8 text-center cursor-pointer group w-72 partner-card-entrance"
                   style={{animationDelay: `${index * 0.2}s`}}
                 >
@@ -622,14 +713,13 @@ const Home = () => {
                     ))}
                   </div>
                   <p className="text-gold-400 text-sm font-semibold group-hover:text-gold-300 transition-colors duration-300">{developer.projects} Projects</p>
-                </Link>
+                </div>
               ))}
               {/* Duplicate set for seamless loop */}
               {partnerDevelopers.map((developer, index) => (
-                <Link 
+                <div 
                   key={`second-${developer.id}-${index}`}
-                  to={`/partner/${developer.id}`}
-                  onClick={() => window.scrollTo(0, 0)}
+                  onClick={() => handleDeveloperClick(developer.id, developer.name)}
                   className="flex-shrink-0 partner-logo-card sparkle-container p-8 text-center cursor-pointer group w-72 partner-card-entrance"
                   style={{animationDelay: `${(index + partnerDevelopers.length) * 0.2}s`}}
                 >
@@ -651,7 +741,7 @@ const Home = () => {
                     ))}
                   </div>
                   <p className="text-gold-400 text-sm font-semibold group-hover:text-gold-300 transition-colors duration-300">{developer.projects} Projects</p>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -661,10 +751,9 @@ const Home = () => {
           {!partnersLoading && !partnersError && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden gap-6 mt-12">
             {partnerDevelopers.slice(0, 4).map((developer, index) => (
-              <Link 
+              <div 
                 key={developer.id}
-                to={`/partner/${developer.id}`}
-                onClick={() => window.scrollTo(0, 0)}
+                onClick={() => handleDeveloperClick(developer.id, developer.name)}
                 className="partner-logo-card sparkle-container p-6 text-center cursor-pointer group partner-card-entrance"
                 style={{animationDelay: `${index * 0.3}s`}}
               >
@@ -686,7 +775,7 @@ const Home = () => {
                   ))}
                 </div>
                 <p className="text-gold-400 text-xs font-semibold group-hover:text-gold-300 transition-colors">{developer.projects} Projects</p>
-              </Link>
+              </div>
             ))}
           </div>
           )}
@@ -836,6 +925,64 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Testimonials Section */}
+      <section className="py-20 bg-gradient-to-b from-black via-gray-900/50 to-black border-t border-gold-500/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Client Reviews</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">What Our Clients Say</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Hear from our satisfied clients about their exceptional experience with AMZ Properties</p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="relative overflow-hidden">
+              <div className="flex transition-transform duration-500 ease-in-out" style={{transform: `translateX(-${activeTestimonial * 100}%)`}}>
+                {testimonials.map((testimonial, index) => (
+                  <div key={testimonial.id} className="w-full flex-shrink-0 px-4">
+                    <div className="luxury-card text-center p-8 md:p-12">
+                      <div className="mb-6">
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name}
+                          className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-gold-400/30"
+                        />
+                        <div className="flex justify-center mb-4">
+                          {[...Array(testimonial.rating)].map((_, i) => (
+                            <svg key={i} className="w-5 h-5 text-gold-400 fill-current" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          ))}
+                        </div>
+                      </div>
+                      <blockquote className="text-lg md:text-xl text-gray-300 mb-6 italic leading-relaxed">
+                        "{testimonial.text}"
+                      </blockquote>
+                      <div>
+                        <h4 className="text-white font-semibold text-lg mb-1">{testimonial.name}</h4>
+                        <p className="text-gold-400 text-sm">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Navigation dots */}
+             <div className="flex justify-center mt-8 space-x-2">
+               {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveTestimonial(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === activeTestimonial ? 'bg-gold-400' : 'bg-gray-600 hover:bg-gray-500'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Blog Section */}
       <section className="py-20 bg-black/95 border-t border-gold-500/20">
         <div className="container mx-auto px-4">
@@ -847,7 +994,7 @@ const Home = () => {
           
           <div className="grid md:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
-              <Link key={post.id} to={`/blog/${post.id}`} className="block">
+              <Link key={post.id} to={`/blog/${post.slug || post.id}`} className="block">
                 <article className="luxury-card overflow-hidden group cursor-pointer">
                   <div className="relative overflow-hidden">
                     <img 
@@ -877,6 +1024,124 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Contact Form Section - Above Footer */}
+      <section className="py-20 bg-gradient-to-br from-luxury-900 to-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-900/90 to-black/90"></div>
+        
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Get In Touch</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-serif">Contact Us Today</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mb-8"></div>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Ready to find your dream property? <span className="text-gold-400 font-semibold">Let's start the conversation</span> and make your real estate goals a reality.
+            </p>
+          </div>
+          
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-gold-500/20 p-8 md:p-12">
+              <form onSubmit={handleContactSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Name Field */}
+                  <div>
+                    <label className="block text-gold-400 font-medium mb-3 text-lg">Full Name *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleContactChange}
+                      required
+                      className="w-full px-6 py-4 bg-dark-700/50 border-2 border-gold-500/30 rounded-xl text-white placeholder-gray-400 focus:border-gold-500 focus:ring-4 focus:ring-gold-500/20 transition-all duration-300"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  
+                  {/* Email Field */}
+                  <div>
+                    <label className="block text-gold-400 font-medium mb-3 text-lg">Email Address *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleContactChange}
+                      required
+                      className="w-full px-6 py-4 bg-dark-700/50 border-2 border-gold-500/30 rounded-xl text-white placeholder-gray-400 focus:border-gold-500 focus:ring-4 focus:ring-gold-500/20 transition-all duration-300"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
+                </div>
+                
+                {/* Phone Field with Country Code */}
+                <div>
+                  <label className="block text-gold-400 font-medium mb-3 text-lg">Phone Number *</label>
+                  <div className="relative flex">
+                    <select
+                      name="countryCode"
+                      value={formData.countryCode}
+                      onChange={handleContactChange}
+                      className="bg-dark-700/50 border-2 border-gold-500/30 border-r-0 rounded-l-xl px-4 py-4 text-white focus:border-gold-500 focus:ring-4 focus:ring-gold-500/20 transition-all duration-300 appearance-none cursor-pointer"
+                    >
+                      <option value="+971">🇦🇪 +971</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+91">🇮🇳 +91</option>
+                      <option value="+92">🇵🇰 +92</option>
+                      <option value="+966">🇸🇦 +966</option>
+                      <option value="+974">🇶🇦 +974</option>
+                      <option value="+965">🇰🇼 +965</option>
+                      <option value="+973">🇧🇭 +973</option>
+                      <option value="+968">🇴🇲 +968</option>
+                    </select>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleContactChange}
+                      required
+                      className="flex-1 px-6 py-4 bg-dark-700/50 border-2 border-gold-500/30 border-l-0 rounded-r-xl text-white placeholder-gray-400 focus:border-gold-500 focus:ring-4 focus:ring-gold-500/20 transition-all duration-300"
+                      placeholder="50 123 4567"
+                    />
+                  </div>
+                </div>
+                
+                {/* Message Field */}
+                <div>
+                  <label className="block text-gold-400 font-medium mb-3 text-lg">Message *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleContactChange}
+                    required
+                    rows={5}
+                    className="w-full px-6 py-4 bg-dark-700/50 border-2 border-gold-500/30 rounded-xl text-white placeholder-gray-400 focus:border-gold-500 focus:ring-4 focus:ring-gold-500/20 transition-all duration-300 resize-none"
+                    placeholder="Tell us about your property requirements or any questions you have..."
+                  ></textarea>
+                </div>
+                
+                {/* Submit Button */}
+                <div className="text-center pt-4">
+                  <button
+                    type="submit"
+                    className="inline-flex items-center px-12 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-luxury-900 rounded-2xl font-bold text-lg hover:from-gold-400 hover:to-gold-500 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-gold-500/30"
+                  >
+                    Send Message
+                    <svg className="ml-3 w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          {/* Decorative elements */}
+          <div className="absolute top-20 left-10 w-20 h-20 border border-gold-400/20 rounded-full animate-float"></div>
+          <div className="absolute bottom-20 right-10 w-16 h-16 border border-gold-400/20 rounded-full animate-float" style={{animationDelay: '2s'}}></div>
+          <div className="absolute top-1/2 left-20 w-2 h-2 bg-gold-400/30 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/3 right-32 w-3 h-3 bg-gold-400/20 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
+        </div>
+      </section>
 
     </div>
   )

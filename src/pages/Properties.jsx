@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import apiService from '../services/api'
+import WishlistButton from '../components/WishlistButton'
 
 const Properties = () => {
   const [filter, setFilter] = useState('all')
@@ -14,7 +15,23 @@ const Properties = () => {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  // Removed likedProperties state
+  
+  // Enhanced filters for luxury real estate
+  const [bedroomFilter, setBedroomFilter] = useState('all')
+  const [bathroomFilter, setBathroomFilter] = useState('all')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [offerTypeFilter, setOfferTypeFilter] = useState('all')
+  const [developerFilter, setDeveloperFilter] = useState('all')
+  const [sortBy, setSortBy] = useState('price-desc')
+  
+  // Get URL parameters for developer filtering
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const developer = urlParams.get('developer')
+    if (developer) {
+      setDeveloperFilter(developer)
+    }
+  }, [])
 
   const openPropertyDetail = (property) => {
     setSelectedProperty(property)
@@ -75,10 +92,19 @@ const Properties = () => {
     const locationMatch = locationFilter === 'all' || property.location === locationFilter
     const projectMatch = projectFilter === 'all' || (property.projectName && property.projectName === projectFilter)
     
+    // Enhanced filters
+    const bedroomMatch = bedroomFilter === 'all' || property.bedrooms === parseInt(bedroomFilter)
+    const bathroomMatch = bathroomFilter === 'all' || property.bathrooms === parseInt(bathroomFilter)
+    const statusMatch = statusFilter === 'all' || property.status === statusFilter
+    const offerTypeMatch = offerTypeFilter === 'all' || property.offerType === offerTypeFilter
+    const developerMatch = developerFilter === 'all' || 
+      (property.developer && property.developer.toLowerCase().includes(developerFilter.toLowerCase()))
+    
     const searchMatch = searchQuery === '' || 
       (property.projectName && property.projectName.toLowerCase().includes(searchQuery.toLowerCase())) ||
       property.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      property.location.toLowerCase().includes(searchQuery.toLowerCase())
+      property.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (property.developer && property.developer.toLowerCase().includes(searchQuery.toLowerCase()))
     
     let priceMatch = true
     
@@ -92,7 +118,26 @@ const Properties = () => {
       priceMatch = property.price > 10000000
     }
     
-    return typeMatch && locationMatch && projectMatch && searchMatch && priceMatch
+    return typeMatch && locationMatch && projectMatch && searchMatch && priceMatch && 
+           bedroomMatch && bathroomMatch && statusMatch && offerTypeMatch && developerMatch
+  }).sort((a, b) => {
+    // Sorting functionality
+    switch (sortBy) {
+      case 'price-low-high':
+        return a.price - b.price
+      case 'price-high-low':
+        return b.price - a.price
+      case 'bedrooms-asc':
+        return a.bedrooms - b.bedrooms
+      case 'bedrooms-desc':
+        return b.bedrooms - a.bedrooms
+      case 'size-asc':
+        return a.size - b.size
+      case 'size-desc':
+        return b.size - a.size
+      default:
+        return 0
+    }
   }) : []
 
   const uniqueLocations = [...new Set(Array.isArray(properties) ? properties.map(property => property.location) : [])]
@@ -130,18 +175,28 @@ const Properties = () => {
           <div className="flex flex-col gap-6">
             {/* Search Bar */}
             <div className="relative">
-                  <label className="block text-sm font-medium text-gold-400 mb-2">Search by Project Name or Location</label>
+              <label className="block text-sm font-medium text-gold-400 mb-2">Search Properties</label>
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Enter project name or location..."
+                  placeholder="Search by project name, location, developer..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-6 py-4 pl-12 bg-dark-800 border border-gold-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 text-lg text-white placeholder-gray-400"
+                  className="w-full px-6 py-4 pl-12 bg-dark-800 border border-gold-500/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-gold-500 text-lg text-white placeholder-gray-400 transition-all duration-300"
                 />
                 <svg className="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
               </div>
             </div>
             
@@ -207,13 +262,150 @@ const Properties = () => {
                   </select>
                 </div>
                 
-                <div className="flex items-end">
-                  <button 
-                    onClick={() => { setFilter('all'); setPriceRange('all'); setLocationFilter('all'); setProjectFilter('all'); setSearchQuery(''); }}
-                    className="btn-primary text-sm mt-6"
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Bedrooms</label>
+                  <select 
+                    value={bedroomFilter} 
+                    onChange={(e) => setBedroomFilter(e.target.value)}
+                    className="luxury-select"
                   >
-                    Clear All
+                    <option key="all-bedrooms" value="all">All Bedrooms</option>
+                    <option key="studio" value="0">Studio</option>
+                    <option key="1-bed" value="1">1 Bedroom</option>
+                    <option key="2-bed" value="2">2 Bedrooms</option>
+                    <option key="3-bed" value="3">3 Bedrooms</option>
+                    <option key="4-bed" value="4">4 Bedrooms</option>
+                    <option key="5-bed" value="5">5+ Bedrooms</option>
+                  </select>
+                </div>
+                
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Bathrooms</label>
+                  <select 
+                    value={bathroomFilter} 
+                    onChange={(e) => setBathroomFilter(e.target.value)}
+                    className="luxury-select"
+                  >
+                    <option key="all-bathrooms" value="all">All Bathrooms</option>
+                    <option key="1-bath" value="1">1 Bathroom</option>
+                    <option key="2-bath" value="2">2 Bathrooms</option>
+                    <option key="3-bath" value="3">3 Bathrooms</option>
+                    <option key="4-bath" value="4">4+ Bathrooms</option>
+                  </select>
+                </div>
+                
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Status</label>
+                  <select 
+                    value={statusFilter} 
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="luxury-select"
+                  >
+                    <option key="all-status" value="all">All Status</option>
+                    <option key="ready-secondary" value="Ready Secondary">Ready Secondary</option>
+                    <option key="offplan-secondary" value="Offplan Secondary">Offplan Secondary</option>
+                    <option key="available" value="available">Available</option>
+                    <option key="sold" value="sold">Sold</option>
+                    <option key="rented" value="rented">Rented</option>
+                    <option key="under-offer" value="under-offer">Under Offer</option>
+                  </select>
+                </div>
+                
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Offer Type</label>
+                  <select 
+                    value={offerTypeFilter} 
+                    onChange={(e) => setOfferTypeFilter(e.target.value)}
+                    className="luxury-select"
+                  >
+                    <option key="all-offers" value="all">All Offers</option>
+                    <option key="sale" value="Sale">For Sale</option>
+                    <option key="rent" value="Rent">For Rent</option>
+                  </select>
+                </div>
+                
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Offer Type</label>
+                  <select 
+                    value={offerTypeFilter} 
+                    onChange={(e) => setOfferTypeFilter(e.target.value)}
+                    className="luxury-select"
+                  >
+                    <option key="all-offers" value="all">All Offers</option>
+                    <option key="sale" value="Sale">For Sale</option>
+                    <option key="rent" value="Rent">For Rent</option>
+                  </select>
+                </div>
+                
+                <div className="relative">
+                  <label className="block text-sm font-medium text-gold-400 mb-2">Sort By</label>
+                  <select 
+                    value={sortBy} 
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="luxury-select"
+                  >
+                    <option key="price-high-low" value="price-high-low">Price: High to Low</option>
+                    <option key="price-low-high" value="price-low-high">Price: Low to High</option>
+                    <option key="bedrooms-desc" value="bedrooms-desc">Bedrooms: High to Low</option>
+                    <option key="bedrooms-asc" value="bedrooms-asc">Bedrooms: Low to High</option>
+                    <option key="size-desc" value="size-desc">Size: Large to Small</option>
+                    <option key="size-asc" value="size-asc">Size: Small to Large</option>
+                  </select>
+                </div>
+                
+                <div className="flex items-end gap-4">
+                  <button 
+                    onClick={() => { 
+                      setFilter('all'); 
+                      setPriceRange('all'); 
+                      setLocationFilter('all'); 
+                      setProjectFilter('all'); 
+                      setSearchQuery(''); 
+                      setBedroomFilter('all');
+                      setBathroomFilter('all');
+                      setStatusFilter('all');
+                      setOfferTypeFilter('all');
+                      setDeveloperFilter('all');
+                      setSortBy('price-high-low');
+                    }}
+                    className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 font-medium text-sm flex items-center gap-2 mt-6"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Clear All Filters
                   </button>
+                  
+                  {/* Active Filters Count */}
+                  {(filter !== 'all' || priceRange !== 'all' || locationFilter !== 'all' || projectFilter !== 'all' || 
+                    bedroomFilter !== 'all' || bathroomFilter !== 'all' || statusFilter !== 'all' || 
+                    offerTypeFilter !== 'all' || developerFilter !== 'all' || searchQuery) && (
+                    <div className="px-3 py-2 bg-gold-500/20 text-gold-400 rounded-lg text-sm font-medium mt-6">
+                      {[
+                        filter !== 'all' && 'Type',
+                        priceRange !== 'all' && 'Price',
+                        locationFilter !== 'all' && 'Location',
+                        projectFilter !== 'all' && 'Project',
+                        bedroomFilter !== 'all' && 'Bedrooms',
+                        bathroomFilter !== 'all' && 'Bathrooms',
+                        statusFilter !== 'all' && 'Status',
+                        offerTypeFilter !== 'all' && 'Offer Type',
+                        developerFilter !== 'all' && 'Developer',
+                        searchQuery && 'Search'
+                      ].filter(Boolean).length} Active Filter{[
+                        filter !== 'all' && 'Type',
+                        priceRange !== 'all' && 'Price',
+                        locationFilter !== 'all' && 'Location',
+                        projectFilter !== 'all' && 'Project',
+                        bedroomFilter !== 'all' && 'Bedrooms',
+                        bathroomFilter !== 'all' && 'Bathrooms',
+                        statusFilter !== 'all' && 'Status',
+                        offerTypeFilter !== 'all' && 'Offer Type',
+                        developerFilter !== 'all' && 'Developer',
+                        searchQuery && 'Search'
+                      ].filter(Boolean).length !== 1 ? 's' : ''}
+                    </div>
+                  )}
                 </div>
               </div>
             
@@ -323,6 +515,12 @@ const Properties = () => {
                     )}
                     
                     <div className="absolute top-6 right-6 flex gap-2">
+                      <WishlistButton 
+                        item={property}
+                        type="property"
+                        className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+                        size="sm"
+                      />
                       <button 
                         onClick={(e) => handleShare(e, property)}
                         className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
@@ -333,10 +531,20 @@ const Properties = () => {
                       </button>
                     </div>
                     
-                    <div className="absolute bottom-6 left-6">
+                    <div className="absolute bottom-6 left-6 flex gap-2">
                       <span className="bg-dark-800/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
                         {property.type}
                       </span>
+                      {property.status && (
+                        <span className="bg-gold-500/80 backdrop-blur-sm text-black px-3 py-1 rounded-full text-sm font-medium capitalize">
+                          {property.status}
+                        </span>
+                      )}
+                      {property.offerType && (
+                        <span className="bg-luxury-600/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+                          {property.offerType}
+                        </span>
+                      )}
                     </div>
                   </div>
                   
@@ -367,8 +575,22 @@ const Properties = () => {
                         </div>
                         <div className="text-center p-3 bg-gradient-to-br from-dark-700 to-dark-600 rounded-xl border border-gold-500/20">
                           <div className="text-lg font-bold text-white">{property.areaFormatted || property.area}</div>
-                          <div className="text-sm text-gray-300">Area</div>
+                          <div className="text-sm text-gray-300">Size</div>
                         </div>
+                      </div>
+                      
+                      {/* Property Status and Offer Type */}
+                      <div className="flex gap-2 mb-4">
+                        {property.status && (
+                          <span className="px-3 py-1 bg-gold-500/20 text-gold-400 rounded-full text-sm font-medium capitalize">
+                            {property.status}
+                          </span>
+                        )}
+                        {property.offerType && (
+                          <span className="px-3 py-1 bg-luxury-500/20 text-luxury-400 rounded-full text-sm font-medium capitalize">
+                            {property.offerType}
+                          </span>
+                        )}
                       </div>
                     </div>
                     

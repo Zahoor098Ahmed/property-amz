@@ -459,7 +459,7 @@ const PartnerDetail = () => {
               <div>
                 <div className="flex items-center mb-6">
                   <img 
-                    src={partner.logoUrl || (partner.logo ? `http://localhost:5002${partner.logo}` : 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop')} 
+                    src={partner.logo || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop'} 
                     alt={partner.name}
                     className="w-16 h-16 rounded-full object-cover mr-4 border-2 border-gold-500/30"
                   />
@@ -506,7 +506,7 @@ const PartnerDetail = () => {
               
               <div className="relative">
                 <img 
-                  src={partner.coverImageUrl || (partner.coverImage ? `http://localhost:5002${partner.coverImage}` : partner.image || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=800&h=400&fit=crop')} 
+                  src={partner.image} 
                   alt={partner.name}
                   className="w-full h-96 object-cover rounded-2xl"
                 />
@@ -639,7 +639,7 @@ const PartnerDetail = () => {
                     <div className="bg-dark-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gold-500/20 hover:border-gold-400/40 transition-all duration-300">
                       <div className="flex items-center mb-4">
                         <img 
-                          src={relatedPartner.logoUrl || (relatedPartner.logo ? `http://localhost:5002${relatedPartner.logo}` : 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop')} 
+                          src={relatedPartner.logo || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=200&fit=crop'} 
                           alt={relatedPartner.name}
                           className="w-12 h-12 rounded-full object-cover mr-4 border border-gold-500/30"
                         />

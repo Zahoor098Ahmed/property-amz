@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5002/api';
 
 // API service for making HTTP requests
 class ApiService {
@@ -518,6 +518,140 @@ class ApiService {
     });
   }
 
+  // Projects API methods
+  async getProjects(filters = {}) {
+    const queryParams = new URLSearchParams();
+    
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && filters[key] !== 'all') {
+        queryParams.append(key, filters[key]);
+      }
+    });
+    
+    const queryString = queryParams.toString();
+    const endpoint = `/projects${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request(endpoint);
+  }
+
+  async getProjectById(id) {
+    if (!id) {
+      throw new Error('Project ID is required');
+    }
+    return this.request(`/projects/${id}`);
+  }
+
+  async createProject(projectData) {
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+    };
+    
+    const requestOptions = {
+      method: 'POST',
+      headers
+    };
+    
+    if (projectData instanceof FormData) {
+      requestOptions.body = projectData;
+    } else {
+      headers['Content-Type'] = 'application/json';
+      requestOptions.body = JSON.stringify(projectData);
+    }
+    
+    return this.request('/projects', requestOptions);
+  }
+
+  async updateProject(id, projectData) {
+    if (!id) {
+      throw new Error('Project ID is required for update');
+    }
+    
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+    };
+    
+    const requestOptions = {
+      method: 'PUT',
+      headers
+    };
+    
+    if (projectData instanceof FormData) {
+      requestOptions.body = projectData;
+    } else {
+      headers['Content-Type'] = 'application/json';
+      requestOptions.body = JSON.stringify(projectData);
+    }
+    
+    return this.request(`/projects/${id}`, requestOptions);
+  }
+
+  async deleteProject(id) {
+    if (!id) {
+      throw new Error('Project ID is required for deletion');
+    }
+    
+    return this.request(`/projects/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
+  }
+
+  // Testimonials API methods
+  async getTestimonials(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/testimonials${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getTestimonialById(id) {
+    return this.request(`/testimonials/${id}`);
+  }
+
+  async createTestimonial(testimonialData, isFormData = false) {
+    const options = {
+      method: 'POST',
+      requiresAuth: true
+    };
+
+    if (isFormData) {
+      options.body = testimonialData;
+    } else {
+      options.body = JSON.stringify(testimonialData);
+    }
+
+    return this.request('/testimonials', options);
+  }
+
+  async updateTestimonial(id, testimonialData, isFormData = false) {
+    const options = {
+      method: 'PUT',
+      requiresAuth: true
+    };
+
+    if (isFormData) {
+      options.body = testimonialData;
+    } else {
+      options.body = JSON.stringify(testimonialData);
+    }
+
+    return this.request(`/testimonials/${id}`, options);
+  }
+
+  async deleteTestimonial(id) {
+    return this.request(`/testimonials/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  async toggleTestimonialStatus(id) {
+    return this.request(`/testimonials/${id}/toggle-status`, {
+      method: 'PATCH',
+      requiresAuth: true
+    });
+  }
+
   // Health check
   async healthCheck() {
     return this.request('/health');
@@ -577,6 +711,17 @@ export const {
   createPartner,
   updatePartner,
   deletePartner,
+  getProjects,
+  getProjectById,
+  createProject,
+  updateProject,
+  deleteProject,
+  getTestimonials,
+  getTestimonialById,
+  createTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  toggleTestimonialStatus,
   healthCheck,
   adminLogin
 } = apiService;
