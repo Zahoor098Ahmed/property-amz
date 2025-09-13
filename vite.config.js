@@ -8,20 +8,24 @@ export default defineConfig({
     port: 3002,
     proxy: {
       '/api': {
-        target: 'http://localhost:3001',
+        target: 'http://localhost:5002',
         changeOrigin: true,
         secure: false,
       },
     },
   },
+  optimizeDeps: {
+    include: ['react-icons/fa', 'react-icons'],
+  },
   build: {
-    target: ['es2020', 'chrome80', 'firefox78', 'safari14', 'edge88'],
+    target: 'esnext',
     cssTarget: 'chrome80',
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           router: ['react-router-dom'],
+          icons: ['react-icons'],
         },
       },
     },
