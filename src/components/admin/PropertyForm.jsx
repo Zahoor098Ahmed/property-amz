@@ -94,20 +94,59 @@ const PropertyForm = ({ property, onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     
+    // Validate required fields
+    const requiredFields = ['title', 'description', 'price', 'location', 'bedrooms', 'bathrooms', 'area']
+    const emptyFields = requiredFields.filter(field => !formData[field] || formData[field] === '')
+    
+    if (emptyFields.length > 0) {
+      alert(`Please fill in all required fields: ${emptyFields.join(', ')}`)
+      return
+    }
+    
+    // Validate numeric fields
+    if (isNaN(formData.price) || formData.price <= 0) {
+      alert('Please enter a valid price')
+      return
+    }
+    
+    if (isNaN(formData.bedrooms) || formData.bedrooms <= 0) {
+      alert('Please enter a valid number of bedrooms')
+      return
+    }
+    
+    if (isNaN(formData.bathrooms) || formData.bathrooms <= 0) {
+      alert('Please enter a valid number of bathrooms')
+      return
+    }
+    
+    if (isNaN(formData.area) || formData.area <= 0) {
+      alert('Please enter a valid area')
+      return
+    }
+    
     try {
+      // Prepare clean data with proper types
+      const cleanData = {
+        ...formData,
+        price: parseInt(formData.price),
+        bedrooms: parseInt(formData.bedrooms),
+        bathrooms: parseInt(formData.bathrooms),
+        area: parseInt(formData.area)
+      }
+      
       // If we have a file, we need to use FormData to send it
       if (imageFile) {
         const formDataObj = new FormData()
         
         // Append all form fields
-        Object.keys(formData).forEach(key => {
+        Object.keys(cleanData).forEach(key => {
           if (key === 'features') {
             // Handle array data
-            formData.features.forEach(feature => {
+            cleanData.features.forEach(feature => {
               formDataObj.append('features', feature)
             })
           } else if (key !== 'image') { // Skip image field as we'll append the file
-            formDataObj.append(key, formData[key])
+            formDataObj.append(key, cleanData[key])
           }
         })
         
@@ -118,8 +157,8 @@ const PropertyForm = ({ property, onSubmit, onCancel }) => {
         onSubmit(formDataObj, true) // true indicates FormData
       } else {
         // No file, just submit the regular form data
-        console.log('Submitting form with JSON data:', formData)
-        onSubmit(formData, false)
+        console.log('Submitting form with JSON data:', cleanData)
+        onSubmit(cleanData, false)
       }
     } catch (error) {
       console.error('Error submitting form:', error)

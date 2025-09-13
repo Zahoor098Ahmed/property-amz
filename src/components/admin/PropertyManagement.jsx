@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import PropertyForm from './PropertyForm'
 import PropertyList from './PropertyList'
-import apiService from '../../services/api'
+import { getAdminProperties, createAdminProperty, updateAdminProperty, deleteAdminProperty } from '../../services/api'
 
 const PropertyManagement = () => {
   const [properties, setProperties] = useState([])
@@ -17,15 +17,14 @@ const PropertyManagement = () => {
 
   const fetchProperties = async () => {
     try {
-      const data = await apiService.getProperties()
+      const data = await getAdminProperties()
       
       if (data.success) {
-        setProperties(data.data)
+        setProperties(data.properties || [])
       } else {
         toast.error('Failed to fetch properties')
       }
     } catch (error) {
-      console.error('Error fetching properties:', error)
       toast.error('Error fetching properties')
     } finally {
       setLoading(false)
@@ -49,7 +48,7 @@ const PropertyManagement = () => {
 
     try {
       console.log('Deleting property with ID:', propertyId)
-      const response = await apiService.deleteProperty(propertyId)
+      const response = await deleteAdminProperty(propertyId)
       console.log('Delete response:', response)
 
       if (response && response.success) {
@@ -74,15 +73,15 @@ const PropertyManagement = () => {
       
       if (editingProperty) {
         console.log('Updating property with ID:', editingProperty._id, 'Data:', propertyData);
-        response = await apiService.updateProperty(editingProperty._id, propertyData, isFormData);
+        response = await updateAdminProperty(editingProperty._id, propertyData, isFormData);
       } else {
         console.log('Creating new property, Data:', propertyData);
-        response = await apiService.createProperty(propertyData, isFormData);
+        response = await createAdminProperty(propertyData, isFormData);
       }
 
       console.log('API Response:', response);
       
-      if (response && response.success) {
+      if (response && (response.success || response.property)) {
         toast.success(
           editingProperty 
             ? 'Property updated successfully' 
@@ -90,7 +89,8 @@ const PropertyManagement = () => {
         )
         setShowForm(false)
         setEditingProperty(null)
-        fetchProperties()
+        // Refresh the properties list
+        await fetchProperties()
       } else {
         toast.error((response && response.message) || 'Failed to save property')
       }

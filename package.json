@@ -10,13 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "proxy": "http://localhost:5003",
     "axios": "^1.11.0",
+    "es6-promise": "^4.2.8",
+    "intersection-observer": "^0.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.8.1",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "resize-observer-polyfill": "^1.5.1",
+    "whatwg-fetch": "^3.6.20"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

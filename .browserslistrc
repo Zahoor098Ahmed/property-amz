@@ -1,0 +1,31 @@
+# Browsers that we support
+
+# Production browsers
+> 1%
+last 2 versions
+Firefox ESR
+not dead
+not ie 11
+not op_mini all
+
+# Modern browsers for development
+last 1 chrome version
+last 1 firefox version
+last 1 safari version
+last 1 edge version
+
+# Mobile browsers
+ios_saf >= 12
+android >= 6
+samsung >= 10
+
+# Specific browser versions for better compatibility
+chrome >= 58
+firefox >= 57
+safari >= 11
+edge >= 16
+
+# Exclude problematic browsers
+not ie <= 10
+not op_mini all
+not kaios <= 2.5

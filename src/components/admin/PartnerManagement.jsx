@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
-import { apiService } from '../../services/api'
+import { getAdminPartners, createAdminPartner, updateAdminPartner, deleteAdminPartner } from '../../services/api'
 
 const PartnerManagement = () => {
   const [partners, setPartners] = useState([])
@@ -47,7 +47,7 @@ const PartnerManagement = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await apiService.getPartners({ status: 'all' })
+      const response = await getAdminPartners({ status: 'all' })
       if (response.partners) {
         setPartners(response.partners || [])
       } else {
@@ -105,9 +105,9 @@ const PartnerManagement = () => {
 
       let response
       if (editingPartner) {
-        response = await apiService.updatePartner(editingPartner._id, submitData)
+        response = await updateAdminPartner(editingPartner._id, submitData)
       } else {
-        response = await apiService.createPartner(submitData)
+        response = await createAdminPartner(submitData)
       }
 
       if (response.success) {
@@ -169,7 +169,7 @@ const PartnerManagement = () => {
     }
 
     try {
-      const response = await apiService.deletePartner(partnerId)
+      const response = await deleteAdminPartner(partnerId)
       
       if (response.success) {
         toast.success('Partner deleted successfully')

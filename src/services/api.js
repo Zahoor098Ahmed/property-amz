@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5002/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
 
 // API service for making HTTP requests
 class ApiService {
@@ -13,16 +13,34 @@ class ApiService {
     const separator = endpoint.includes('?') ? '&' : '?';
     const url = `${API_BASE_URL}${endpoint}${separator}${cacheBuster}`;
     
+    const headers = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      ...(options.headers || {}),
+    };
+    
+    // Add Content-Type if not FormData
+    if (!options.isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+    
+    // Add authentication token if required
+    if (options.requiresAuth) {
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers['Authorization'] = `Bearer ${adminToken}`;
+      }
+    }
+    
     const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0',
-        ...(options.headers || {}),
-      },
+      headers,
       ...options,
     };
+    
+    // Remove custom options from config
+    delete config.requiresAuth;
+    delete config.isFormData;
 
     try {
       console.log(`API Request to: ${url}`, config);
@@ -677,6 +695,146 @@ class ApiService {
       throw error;
     }
   }
+
+  // Admin Partners Management
+  async getAdminPartners(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/partners${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminPartner(partnerData) {
+    return this.request('/admin/partners', {
+      method: 'POST',
+      body: JSON.stringify(partnerData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminPartner(id, partnerData) {
+    return this.request(`/admin/partners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(partnerData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminPartner(id) {
+    return this.request(`/admin/partners/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Testimonials Management
+  async getAdminTestimonials(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/testimonials${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminTestimonial(testimonialData) {
+    return this.request('/admin/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(testimonialData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminTestimonial(id, testimonialData) {
+    return this.request(`/admin/testimonials/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(testimonialData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminTestimonial(id) {
+    return this.request(`/admin/testimonials/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Blogs Management
+  async getAdminBlogs(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/blogs${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminBlog(blogData) {
+    return this.request('/admin/blogs', {
+      method: 'POST',
+      body: JSON.stringify(blogData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminBlog(id, blogData) {
+    return this.request(`/admin/blogs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(blogData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminBlog(id) {
+    return this.request(`/admin/blogs/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Properties Management
+  async getAdminProperties(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/properties${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminProperty(propertyData, isFormData = false) {
+    const options = {
+      method: 'POST',
+      requiresAuth: true
+    };
+    
+    if (isFormData) {
+      options.body = propertyData;
+      options.isFormData = true;
+    } else {
+      options.body = JSON.stringify(propertyData);
+    }
+    
+    return this.request('/admin/properties', options);
+  }
+
+  async updateAdminProperty(id, propertyData, isFormData = false) {
+    const options = {
+      method: 'PUT',
+      requiresAuth: true
+    };
+    
+    if (isFormData) {
+      options.body = propertyData;
+      options.isFormData = true;
+    } else {
+      options.body = JSON.stringify(propertyData);
+    }
+    
+    return this.request(`/admin/properties/${id}`, options);
+  }
+
+  async deleteAdminProperty(id) {
+    return this.request(`/admin/properties/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
 }
 
 // Create and export a singleton instance
@@ -723,5 +881,21 @@ export const {
   deleteTestimonial,
   toggleTestimonialStatus,
   healthCheck,
-  adminLogin
+  adminLogin,
+  getAdminPartners,
+  createAdminPartner,
+  updateAdminPartner,
+  deleteAdminPartner,
+  getAdminTestimonials,
+  createAdminTestimonial,
+  updateAdminTestimonial,
+  deleteAdminTestimonial,
+  getAdminBlogs,
+  createAdminBlog,
+  updateAdminBlog,
+  deleteAdminBlog,
+  getAdminProperties,
+  createAdminProperty,
+  updateAdminProperty,
+  deleteAdminProperty
 } = apiService;

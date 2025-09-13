@@ -14,6 +14,7 @@ import PartnerDetail from './pages/PartnerDetail'
 import AdminLogin from './pages/admin/Login'
 import AdminDashboard from './pages/admin/Dashboard'
 import { WishlistProvider } from './contexts/WishlistContext'
+import { initBrowserCompatibility } from './utils/browserCompatibility'
 import './App.css'
 
 // Admin route guard component
@@ -23,6 +24,11 @@ const AdminRoute = ({ children }) => {
 }
 
 function App() {
+  // Initialize browser compatibility on component mount
+  useEffect(() => {
+    initBrowserCompatibility();
+  }, []);
+
   return (
     <WishlistProvider>
       <Router>

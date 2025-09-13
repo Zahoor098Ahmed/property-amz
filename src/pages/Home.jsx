@@ -322,7 +322,7 @@ const Home = () => {
     const fetchProperties = async () => {
       try {
         // Add cache-busting parameter to prevent browser caching
-        const response = await fetch(`http://localhost:5002/api/properties?_=${new Date().getTime()}`)
+        const response = await fetch(`http://localhost:3001/api/properties?_=${new Date().getTime()}`)
         if (response.ok) {
           const result = await response.json()
           const data = result.success ? result.data : result

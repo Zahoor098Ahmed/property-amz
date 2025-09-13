@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
-import { apiService } from '../../services/api'
+import { getAdminBlogs, createAdminBlog, updateAdminBlog, deleteAdminBlog } from '../../services/api'
 
 const BlogManagement = () => {
   const [blogs, setBlogs] = useState([])
@@ -35,7 +35,7 @@ const BlogManagement = () => {
 
   const fetchBlogs = async () => {
     try {
-      const response = await apiService.getBlogs({ status: 'all' })
+      const response = await getAdminBlogs({ status: 'all' })
       if (response.blogs) {
         setBlogs(response.blogs || [])
       } else {
@@ -77,9 +77,9 @@ const BlogManagement = () => {
 
       let response
       if (editingBlog) {
-        response = await apiService.updateBlog(editingBlog._id, submitData)
+        response = await updateAdminBlog(editingBlog._id, submitData)
       } else {
-        response = await apiService.createBlog(submitData)
+        response = await createAdminBlog(submitData)
       }
 
       if (response.success) {
@@ -121,7 +121,7 @@ const BlogManagement = () => {
     }
 
     try {
-      const response = await apiService.deleteBlog(blogId)
+      const response = await deleteAdminBlog(blogId)
       
       if (response.success) {
         toast.success('Blog deleted successfully')
