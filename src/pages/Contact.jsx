@@ -121,7 +121,7 @@ const Contact = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-black to-dark-900">
       {/* Enhanced Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center bg-gradient-to-br from-dark-900 via-luxury-800 to-dark-900 text-white overflow-hidden">
         {/* Background Image */}
@@ -183,7 +183,7 @@ const Contact = () => {
       </section>
 
       {/* Enhanced Contact Form & Info */}
-      <section id="contact-form" className="py-20 relative overflow-hidden">
+      <section id="contact-form" className="py-20 relative overflow-hidden bg-gradient-to-br from-black to-dark-900">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-10 left-10 w-20 h-20 border border-luxury-300 rotate-45"></div>
@@ -195,11 +195,11 @@ const Contact = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Enhanced Contact Form */}
-            <div className={`luxury-card p-10 transition-all duration-1000 transform ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
+            <div className={`bg-dark-800/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-gold-500/20 transition-all duration-1000 transform ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'}`}>
               <div className="mb-8">
-                <span className="text-luxury-600 font-medium tracking-wider uppercase text-sm animate-fade-in">Send Message</span>
-                <h2 className="text-4xl font-bold text-dark-800 mt-2 font-serif animate-slide-up">Let's Start a Conversation</h2>
-                <p className="text-dark-600 mt-4 text-lg animate-fade-in" style={{animationDelay: '0.2s'}}>Share your requirements and we'll get back to you within 24 hours</p>
+                <span className="text-gold-400 font-medium tracking-wider uppercase text-sm animate-fade-in">Send Message</span>
+                <h2 className="text-4xl font-bold text-white mt-2 font-serif animate-slide-up">Let's Start a Conversation</h2>
+                <p className="text-gray-300 mt-4 text-lg animate-fade-in" style={{animationDelay: '0.2s'}}>Share your requirements and we'll get back to you within 24 hours</p>
               </div>
               
               {submitMessage && (
@@ -216,7 +216,7 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="group">
-                    <label htmlFor="name" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                    <label htmlFor="name" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                       Full Name *
                     </label>
                     <div className="relative">
@@ -227,15 +227,15 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className="luxury-input w-full group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                        className="bg-dark-700/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 w-full group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                         placeholder="Your full name"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold-500/5 to-gold-400/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                   </div>
                   
                   <div className="group">
-                    <label htmlFor="email" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                    <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                       Email Address *
                     </label>
                     <div className="relative">
@@ -246,17 +246,17 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        className="luxury-input w-full group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                        className="bg-dark-700/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 w-full group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                         placeholder="your.email@example.com"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold-500/5 to-gold-400/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="group">
-                    <label htmlFor="phone" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                    <label htmlFor="phone" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                       Phone Number
                     </label>
                     <div className="relative">
@@ -266,15 +266,15 @@ const Contact = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className="luxury-input w-full group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                        className="bg-dark-700/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 w-full group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                         placeholder="+971 50 123 4567"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold-500/5 to-gold-400/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                   </div>
                   
                   <div className="group">
-                    <label htmlFor="propertyType" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                    <label htmlFor="propertyType" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                       Property Interest
                     </label>
                     <div className="relative">
@@ -283,7 +283,7 @@ const Contact = () => {
                         name="propertyType"
                         value={formData.propertyType}
                         onChange={handleChange}
-                        className="luxury-select w-full group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                        className="bg-dark-700/50 border border-gray-600 text-white rounded-xl px-4 py-3 w-full group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                       >
                         <option key="apartment" value="apartment">Luxury Apartment</option>
                         <option key="villa" value="villa">Premium Villa</option>
@@ -293,13 +293,13 @@ const Contact = () => {
                         <option key="commercial" value="commercial">Commercial Property</option>
                         <option key="investment" value="investment">Investment Opportunity</option>
                       </select>
-                      <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold-500/5 to-gold-400/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                   </div>
                 </div>
                 
                 <div className="group">
-                  <label htmlFor="subject" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                  <label htmlFor="subject" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                     Subject *
                   </label>
                   <div className="relative">
@@ -310,7 +310,7 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       required
-                      className="luxury-input w-full group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                      className="bg-dark-700/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 w-full group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                       placeholder="How can we help you?"
                     />
                     <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
@@ -318,7 +318,7 @@ const Contact = () => {
                 </div>
                 
                 <div className="group">
-                  <label htmlFor="message" className="block text-sm font-semibold text-dark-700 mb-3 group-hover:text-luxury-600 transition-colors duration-300">
+                  <label htmlFor="message" className="block text-sm font-semibold text-gray-300 mb-3 group-hover:text-gold-400 transition-colors duration-300">
                     Message *
                   </label>
                   <div className="relative">
@@ -329,7 +329,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       rows={6}
-                      className="luxury-input w-full resize-none group-hover:border-luxury-400 focus:border-luxury-500 focus:ring-2 focus:ring-luxury-200 transition-all duration-300"
+                      className="bg-dark-700/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 w-full resize-none group-hover:border-gold-400 focus:border-gold-500 focus:ring-2 focus:ring-gold-200/20 transition-all duration-300"
                       placeholder="Tell us more about your requirements, budget, preferred location, and timeline..."
                     ></textarea>
                     <div className="absolute inset-0 bg-gradient-to-r from-luxury-500/5 to-gold-500/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
@@ -344,7 +344,7 @@ const Contact = () => {
                     className={`w-full py-4 px-8 rounded-xl font-semibold text-white transition-all duration-500 transform relative overflow-hidden ${
                       isSubmitting 
                         ? 'bg-gray-400 cursor-not-allowed' 
-                        : 'bg-gradient-to-r from-luxury-600 to-gold-500 hover:from-luxury-700 hover:to-gold-600 hover:shadow-2xl hover:shadow-gold-500/25 hover:-translate-y-2 hover:scale-105'
+                        : 'bg-gradient-to-r from-luxury-600 to-gold-500 hover:from-luxury-700 hover:to-gold-600 hover:shadow-2xl hover:shadow-yellow-500 hover:-translate-y-2 hover:scale-105'
                     }`}
                   >
                     {/* Button Background Animation */}
@@ -382,17 +382,17 @@ const Contact = () => {
             {/* Enhanced Contact Information */}
             <div className={`transition-all duration-1000 transform ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'}`} style={{animationDelay: '0.2s'}}>
               <div className="mb-12">
-                <span className="text-luxury-600 font-medium tracking-wider uppercase text-sm animate-fade-in">Contact Information</span>
-                <h2 className="text-4xl font-bold text-dark-800 mt-2 font-serif animate-slide-up">Get In Touch</h2>
-                <p className="text-dark-600 mt-4 text-lg animate-fade-in" style={{animationDelay: '0.2s'}}>Multiple ways to reach our luxury real estate experts</p>
+                <span className="text-gold-400 font-medium tracking-wider uppercase text-sm animate-fade-in">Contact Information</span>
+                <h2 className="text-4xl font-bold text-white mt-2 font-serif animate-slide-up">Get In Touch</h2>
+                <p className="text-gray-300 mt-4 text-lg animate-fade-in" style={{animationDelay: '0.2s'}}>Multiple ways to reach our luxury real estate experts</p>
               </div>
               
               <div className="space-y-8">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="group hover-lift animate-fade-in" style={{animationDelay: `${0.1 * index}s`}}>
-                    <div className="relative flex items-start space-x-6 p-6 bg-white rounded-2xl shadow-luxury hover:shadow-2xl hover:shadow-gold-500/20 transition-all duration-500 overflow-hidden">
+                    <div className="relative flex items-start space-x-6 p-6 bg-dark-800/90 backdrop-blur-sm rounded-2xl shadow-lg border border-gold-500/20 hover:shadow-2xl hover:shadow-gold-500/20 transition-all duration-500 overflow-hidden">
                       {/* Background Gradient Animation */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-luxury-50/50 to-gold-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-gold-500/10 to-gold-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       {/* Icon with Enhanced Animation */}
                       <div className={`relative w-16 h-16 bg-gradient-to-r ${info.gradient} rounded-2xl flex items-center justify-center text-white flex-shrink-0 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-lg group-hover:shadow-xl`}>
@@ -402,14 +402,14 @@ const Contact = () => {
                       
                       {/* Content with Enhanced Styling */}
                       <div className="relative z-10 flex-1">
-                        <h3 className="text-xl font-bold text-dark-800 mb-3 group-hover:text-luxury-600 transition-colors duration-300">{info.title}</h3>
+                        <h3 className="text-xl font-bold text-white mb-3 group-hover:text-gold-400 transition-colors duration-300">{info.title}</h3>
                         {info.details.map((detail, idx) => (
-                          <p key={idx} className="text-dark-600 text-lg leading-relaxed group-hover:text-dark-700 transition-colors duration-300">{detail}</p>
+                          <p key={idx} className="text-gray-300 text-lg leading-relaxed group-hover:text-gray-200 transition-colors duration-300">{detail}</p>
                         ))}
                       </div>
                       
                       {/* Hover Border Effect */}
-                      <div className="absolute inset-0 border-2 border-transparent group-hover:border-luxury-200 rounded-2xl transition-colors duration-300"></div>
+                      <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold-400/30 rounded-2xl transition-colors duration-300"></div>
                     </div>
                   </div>
                 ))}
@@ -422,7 +422,7 @@ const Contact = () => {
       </section>
 
       {/* Enhanced FAQ Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-b from-black to-dark-900 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-20 left-1/4 w-32 h-32 border border-luxury-300 rounded-full"></div>
@@ -433,9 +433,9 @@ const Contact = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <span className="text-luxury-600 font-medium tracking-wider uppercase text-sm animate-fade-in">Support</span>
-            <h2 className="text-5xl font-bold text-dark-800 mt-2 mb-6 font-serif animate-slide-up">Frequently Asked Questions</h2>
-            <p className="text-xl text-dark-600 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm animate-fade-in">Support</span>
+            <h2 className="text-5xl font-bold text-white mt-2 mb-6 font-serif animate-slide-up">Frequently Asked Questions</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-fade-in" style={{animationDelay: '0.2s'}}>
               Quick answers to common questions about our luxury real estate services
             </p>
           </div>
@@ -444,17 +444,17 @@ const Contact = () => {
             {faqs.map((faq, index) => (
               <div 
                 key={index} 
-                className={`group luxury-card p-8 cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-luxury-500/10 animate-fade-in ${
-                  activeTab === index ? 'ring-2 ring-luxury-300 bg-gradient-to-r from-luxury-50/50 to-gold-50/50' : 'hover:bg-gradient-to-r hover:from-luxury-50/30 hover:to-gold-50/30'
+                className={`group bg-dark-800/90 backdrop-blur-sm rounded-2xl border border-gold-500/20 p-8 cursor-pointer transition-all duration-500 hover:shadow-2xl hover:shadow-gold-500/20 animate-fade-in ${
+                  activeTab === index ? 'ring-2 ring-gold-400/50 bg-gradient-to-r from-gold-500/10 to-gold-400/10' : 'hover:bg-gradient-to-r hover:from-gold-500/5 hover:to-gold-400/5'
                 }`}
                 style={{animationDelay: `${index * 0.1}s`}}
                 onClick={() => setActiveTab(activeTab === index ? -1 : index)}
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-bold text-dark-800 font-serif group-hover:text-luxury-600 transition-colors duration-300 flex-1 pr-4">
+                  <h3 className="text-xl font-bold text-white font-serif group-hover:text-gold-400 transition-colors duration-300 flex-1 pr-4">
                     {faq.question}
                   </h3>
-                  <div className={`w-8 h-8 rounded-full bg-gradient-to-r from-luxury-500 to-gold-500 flex items-center justify-center text-white transition-transform duration-300 ${
+                  <div className={`w-8 h-8 rounded-full bg-gradient-to-r from-gold-500 to-gold-400 flex items-center justify-center text-white transition-transform duration-300 ${
                     activeTab === index ? 'rotate-180' : 'group-hover:scale-110'
                   }`}>
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -466,15 +466,15 @@ const Contact = () => {
                 <div className={`overflow-hidden transition-all duration-500 ${
                   activeTab === index ? 'max-h-96 opacity-100 mt-6' : 'max-h-0 opacity-0'
                 }`}>
-                  <div className="border-t border-luxury-200 pt-6">
-                    <p className="text-dark-600 text-lg leading-relaxed">
+                  <div className="border-t border-gold-500/20 pt-6">
+                    <p className="text-gray-300 text-lg leading-relaxed">
                       {faq.answer}
                     </p>
                   </div>
                 </div>
                 
                 {/* Hover Border Effect */}
-                <div className="absolute inset-0 border-2 border-transparent group-hover:border-luxury-200/50 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
+                <div className="absolute inset-0 border-2 border-transparent group-hover:border-gold-400/30 rounded-2xl transition-colors duration-300 pointer-events-none"></div>
               </div>
             ))}
           </div>

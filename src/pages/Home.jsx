@@ -1,15 +1,42 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+// Using Unicode symbols instead of react-icons for now
 
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [currentBgIndex, setCurrentBgIndex] = useState(0)
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    countryCode: '+971',
+    message: ''
+  })
+
   const [counters, setCounters] = useState({
     properties: 0,
     clients: 0,
     experience: 0,
     awards: 0
   })
+  const [exclusiveProperties, setExclusiveProperties] = useState([])
+  const [offPlanProperties, setOffPlanProperties] = useState([])
+  const [partnerDevelopers, setPartnerDevelopers] = useState([])
+  const [testimonials, setTestimonials] = useState([])
+  const [reviews, setReviews] = useState([])
+  const [reviewForm, setReviewForm] = useState({
+    name: '',
+    email: '',
+    rating: 5,
+    title: '',
+    message: '',
+    propertyType: 'Other',
+    location: '',
+    company: ''
+  })
+  const [blogPosts, setBlogPosts] = useState([])
+  const [services, setServices] = useState([])
   
   // Background images for hero section
   const heroBackgrounds = [
@@ -18,6 +45,97 @@ const Home = () => {
     'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
     'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
     'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+  ]
+
+  // Partner Developers Data
+  const staticPartnerDevelopers = [
+    { id: 1, name: 'Emaar Properties', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=EMAAR', projects: 25 },
+    { id: 2, name: 'Dubai Properties', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=DUBAI+PROP', projects: 18 },
+    { id: 3, name: 'Damac Properties', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=DAMAC', projects: 22 },
+    { id: 4, name: 'Sobha Realty', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=SOBHA', projects: 15 },
+    { id: 5, name: 'Meraas', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=MERAAS', projects: 12 },
+    { id: 6, name: 'Nakheel', logo: 'https://via.placeholder.com/200x100/d97706/000000?text=NAKHEEL', projects: 20 }
+  ]
+
+  // Services Data
+   const staticServices = [
+    {
+      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg></div>,
+      title: 'Property Sales',
+      description: 'Expert guidance in buying and selling luxury properties with personalized service'
+    },
+    {
+      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>,
+      title: 'Property Management',
+      description: 'Comprehensive property management services ensuring maximum returns on investment'
+    },
+    {
+      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>,
+      title: 'Investment Advisory',
+      description: 'Strategic investment advice to help you make informed decisions in Dubai real estate'
+    },
+    {
+      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>,
+      title: 'Concierge Services',
+      description: 'Premium concierge services for all your luxury lifestyle and property needs'
+    }
+  ]
+
+
+  // Testimonials Data
+  const staticTestimonials = [
+    {
+      id: 1,
+      name: 'Ahmed Al Mansouri',
+      role: 'CEO, Al Mansouri Holdings',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+      text: 'AMZ Properties delivered exceptional service in finding our dream home. Their expertise in luxury properties is unmatched.',
+      rating: 5
+    },
+    {
+      id: 2,
+      name: 'Sarah Johnson',
+      role: 'International Investor',
+      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+      text: 'Professional, reliable, and truly understands the luxury market. Highly recommend for premium property investments.',
+      rating: 5
+    },
+    {
+      id: 3,
+      name: 'Mohammed Hassan',
+      role: 'Business Owner',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+      text: 'Outstanding experience from start to finish. AMZ Properties made our property purchase seamless and stress-free.',
+      rating: 5
+    }
+  ]
+
+  // Blog Posts Data
+  const staticBlogPosts = [
+    {
+      id: 1,
+      title: 'Dubai Real Estate Market Trends 2024',
+      excerpt: 'Discover the latest trends shaping Dubai\'s luxury property market and investment opportunities.',
+      image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=250&fit=crop',
+      date: '2024-01-15',
+      category: 'Market Analysis'
+    },
+    {
+      id: 2,
+      title: 'Investment Guide: Off-Plan Properties',
+      excerpt: 'Everything you need to know about investing in off-plan properties in the UAE.',
+      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=250&fit=crop',
+      date: '2024-01-10',
+      category: 'Investment'
+    },
+    {
+      id: 3,
+      title: 'Luxury Living: Premium Amenities Guide',
+      excerpt: 'Explore the world-class amenities that define luxury living in Dubai\'s premium developments.',
+      image: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=400&h=250&fit=crop',
+      date: '2024-01-05',
+      category: 'Lifestyle'
+    }
   ]
   
   // Auto-change background images
@@ -40,21 +158,179 @@ const Home = () => {
       let current = 0
       const increment = targets[key] / steps
       
-      return setInterval(() => {
+      const intervalId = setInterval(() => {
         current += increment
         if (current >= targets[key]) {
           current = targets[key]
-          clearInterval(intervals.find(i => i === interval))
+          clearInterval(intervalId)
         }
         setCounters(prev => ({ ...prev, [key]: Math.floor(current) }))
       }, stepDuration)
+      
+      return intervalId
     })
     
     return () => intervals.forEach(clearInterval)
   }, [])
+
+  // Initialize static data and fetch reviews
+  useEffect(() => {
+    setPartnerDevelopers(staticPartnerDevelopers)
+    setTestimonials(staticTestimonials)
+    setBlogPosts(staticBlogPosts)
+    setServices(staticServices)
+    
+    // Fetch reviews from API
+    fetchReviews()
+  }, [])
+
+  // Fetch reviews from database
+  const fetchReviews = async () => {
+    try {
+      const response = await fetch('http://localhost:5002/api/reviews/featured')
+      if (response.ok) {
+        const data = await response.json()
+        setReviews(data)
+      } else {
+        // Fallback to static testimonials if API fails
+        setReviews(staticTestimonials)
+      }
+    } catch (error) {
+      console.error('Error fetching reviews:', error)
+      setReviews(staticTestimonials)
+    }
+  }
+
+  // Auto-rotate testimonials
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveTestimonial((prev) => (prev + 1) % staticTestimonials.length)
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [])
+
+  // Fetch properties from API
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        // Add cache-busting parameter to prevent browser caching
+        const response = await fetch(`/api/properties?_=${new Date().getTime()}`)
+        if (response.ok) {
+          const result = await response.json()
+          const data = result.success ? result.data : result
+          if (Array.isArray(data)) {
+            const exclusive = data.filter(property => property.type === 'exclusive')
+            const offPlan = data.filter(property => property.type === 'off-plan')
+            setExclusiveProperties(exclusive)
+            setOffPlanProperties(offPlan)
+          } else {
+            // Fallback to static data if data is not an array
+            setExclusiveProperties(staticExclusiveProperties)
+            setOffPlanProperties(staticOffPlanProperties)
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching properties:', error)
+        // Fallback to static data if API fails
+        setExclusiveProperties(staticExclusiveProperties)
+        setOffPlanProperties(staticOffPlanProperties)
+      }
+    }
+    
+    fetchProperties()
+  }, [])
+
+  // Form handling functions
+  const handleInputChange = (e) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      })
+      if (response.ok) {
+        alert('Message sent successfully!')
+        setFormData({ name: '', email: '', phone: '', countryCode: '+971', message: '' })
+      }
+    } catch (error) {
+      console.error('Error sending message:', error)
+      alert('Error sending message. Please try again.')
+    }
+  }
+
+  // Handle review form submission
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault()
+    
+    // Validate required fields
+    if (!reviewForm.name || !reviewForm.email || !reviewForm.title || !reviewForm.message) {
+      alert('Please fill in all required fields.')
+      return
+    }
+    
+    try {
+      console.log('Submitting review:', reviewForm)
+      const response = await fetch('http://localhost:5002/api/reviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reviewForm)
+      })
+      
+      console.log('Response status:', response.status)
+      const responseData = await response.text()
+      console.log('Response data:', responseData)
+      
+      if (response.ok) {
+        alert('Review submitted successfully! It will be visible after admin approval.')
+        setReviewForm({
+          name: '',
+          email: '',
+          rating: 5,
+          title: '',
+          message: '',
+          propertyType: 'Villa',
+          location: '',
+          company: ''
+        })
+      } else {
+        console.error('Server error:', response.status, responseData)
+        alert(`Error submitting review: ${response.status} - ${responseData}`)
+      }
+    } catch (error) {
+      console.error('Network error submitting review:', error)
+      alert('Network error submitting review. Please check your connection and try again.')
+    }
+  }
+
+  // Handle review form input changes
+  const handleReviewInputChange = (e) => {
+    const { name, value } = e.target
+    setReviewForm(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handleDeveloperClick = (developerId) => {
+    // Navigate to partner detail page
+    window.location.href = `/partner/${developerId}`
+  }
+
+  const countryCodes = [
+    { code: '+971', country: 'UAE' },
+    { code: '+1', country: 'USA' },
+    { code: '+44', country: 'UK' },
+    { code: '+91', country: 'India' },
+    { code: '+966', country: 'Saudi Arabia' }
+  ]
+
+
   
-  // Exclusive Properties Data (matching LCR Dubai)
-  const exclusiveProperties = [
+  // Static Exclusive Properties Data (fallback)
+  const staticExclusiveProperties = [
     {
       id: 1,
       title: 'Luxury Villa',
@@ -117,8 +393,8 @@ const Home = () => {
     }
   ]
 
-  // Off-Plan Properties Data
-  const offPlanProperties = [
+  // Static Off-Plan Properties Data (fallback)
+  const staticOffPlanProperties = [
     {
       id: 7,
       title: 'Luxury Apartments',
@@ -161,29 +437,7 @@ const Home = () => {
     }
   ]
 
-  // Services Data
-  const services = [
-    {
-      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg></div>,
-      title: 'Property Sales',
-      description: 'Expert guidance in buying and selling luxury properties with personalized service'
-    },
-    {
-      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>,
-      title: 'Property Management',
-      description: 'Comprehensive property management services ensuring maximum returns on investment'
-    },
-    {
-      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg></div>,
-      title: 'Investment Advisory',
-      description: 'Strategic investment advice to help you make informed decisions in Dubai real estate'
-    },
-    {
-      icon: <div className="w-16 h-16 bg-gradient-to-br from-luxury-600 to-gold-500 rounded-2xl flex items-center justify-center mx-auto"><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>,
-      title: 'Concierge Services',
-      description: 'Premium concierge services for all your luxury lifestyle and property needs'
-    }
-  ]
+
 
   const achievements = [
     { 
@@ -242,7 +496,7 @@ const Home = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black">
       {/* Hero Section with Search */}
       <section className="relative min-h-screen text-white overflow-hidden">
         {/* Background Images */}
@@ -257,8 +511,8 @@ const Home = () => {
         ))}
         
         {/* Overlay */}
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-luxury-600/30 to-gold-600/30"></div>
+        <div className="absolute inset-0 bg-black/65"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-luxury-600/40 to-gold-600/40"></div>
         
         {/* Background Indicators */}
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
@@ -308,56 +562,47 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Exclusive Properties Section */}
-      <section className="py-20 bg-gray-50">
+      {/* Partner Developers Section */}
+      <section className="py-20 bg-black border-t border-gold-500/20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 animate-fade-in">
-            <span className="text-luxury-600 font-medium tracking-wider uppercase text-sm mb-4 block">Premium Collection</span>
-            <h2 className="text-5xl font-bold text-dark-800 mb-6 font-serif animate-slide-up">Exclusives Properties with AMZ Properties</h2>
-            <p className="text-xl text-dark-600 max-w-3xl mx-auto animate-slide-up" style={{animationDelay: '0.2s'}}>Discover our handpicked selection of Dubai's most prestigious properties</p>
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Trusted Partners</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">Our Partner Developers</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Collaborating with Dubai's most prestigious developers to bring you exceptional properties</p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {exclusiveProperties.map((property, index) => (
-              <div key={property.id} className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
-                <div className="relative overflow-hidden">
-                  <img 
-                    src={property.image} 
-                    alt={property.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-luxury-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.badge}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="p-6">
-                  <div className="text-luxury-600 font-bold text-xl mb-2">{property.price}</div>
-                  <div className="flex items-center text-dark-600 mb-4">
-                    <span className="mr-4">{property.bedrooms}{property.bedrooms === 1 ? '' : property.bedrooms === 2 ? '2' : ''}</span>
-                    <span>{property.location}</span>
-                  </div>
-                </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            {partnerDevelopers.map((developer) => (
+              <div 
+                key={developer.id}
+                onClick={() => handleDeveloperClick(developer.id)}
+                className="luxury-card p-6 text-center cursor-pointer group hover:scale-105 transition-all duration-300"
+              >
+                <img 
+                  src={developer.logo} 
+                  alt={developer.name}
+                  className="w-full h-16 object-contain mb-4 filter brightness-0 invert group-hover:filter-none transition-all duration-300"
+                />
+                <h3 className="text-white font-semibold text-sm mb-2">{developer.name}</h3>
+                <p className="text-gold-400 text-xs">{developer.projects} Projects</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Off-Plan Properties Section */}
-      <section className="py-20 bg-white">
+      {/* Exclusive Properties Section */}
+      <section className="py-20 bg-black/95 border-t border-gold-500/20">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 animate-fade-in">
-            <span className="text-gold-600 font-medium tracking-wider uppercase text-sm mb-4 block">Future Investments</span>
-            <h2 className="text-5xl font-bold text-dark-800 mb-6 font-serif animate-slide-up">Off-Plan Properties</h2>
-            <p className="text-xl text-dark-600 max-w-3xl mx-auto animate-slide-up" style={{animationDelay: '0.2s'}}>Secure your future with Dubai's most promising upcoming developments</p>
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Premium Collection</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">Exclusive Properties with AMZ Properties</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Discover our handpicked selection of Dubai's most prestigious properties</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {offPlanProperties.map((property, index) => (
-              <div key={property.id} className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
+            {exclusiveProperties.map((property, index) => (
+              <div key={property.id} className="group bg-dark-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in border border-gold-500/20" style={{animationDelay: `${index * 0.1}s`}}>
                 <div className="relative overflow-hidden">
                   <img 
                     src={property.image} 
@@ -366,18 +611,60 @@ const Home = () => {
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-gold-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                      {property.badge}
+                      {property.type === 'exclusive' ? 'Exclusive' : property.badge || 'Exclusive'}
                     </span>
                   </div>
                 </div>
                 
                 <div className="p-6">
-                  <div className="text-luxury-600 font-bold text-xl mb-2">{property.price}</div>
-                  <div className="flex items-center text-dark-600 mb-4">
-                    <span className="mr-4">{property.bedrooms}</span>
-                    <span>{property.location}</span>
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors">{property.title}</h3>
+                  <div className="text-gold-400 font-bold text-xl mb-2">{property.price}</div>
+                  <div className="flex items-center text-gray-300 mb-4">
+                    <span className="mr-4">{property.bedrooms} bed, {property.bathrooms} bath</span>
+                    <span>{property.area}</span>
                   </div>
-                  <div className="text-sm text-gray-500">Developer: {property.developer}</div>
+                  <div className="text-sm text-gray-400">{property.location}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Off-Plan Properties Section */}
+      <section className="py-20 bg-black/95 border-t border-gold-500/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16 animate-fade-in">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Future Investments</span>
+            <h2 className="text-5xl font-bold text-gold-400 mb-6 font-serif animate-slide-up">Off-Plan Properties</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto animate-slide-up" style={{animationDelay: '0.2s'}}>Secure your future with Dubai's most promising upcoming developments</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {offPlanProperties.map((property, index) => (
+              <div key={property.id} className="group bg-dark-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 animate-fade-in border border-gold-500/20" style={{animationDelay: `${index * 0.1}s`}}>
+                <div className="relative overflow-hidden">
+                  <img 
+                    src={property.image} 
+                    alt={property.title}
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-gold-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                      {property.type === 'off-plan' ? 'Off-Plan' : property.badge || 'Off-Plan'}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors">{property.title}</h3>
+                  <div className="text-gold-400 font-bold text-xl mb-2">{property.price}</div>
+                  <div className="flex items-center text-gray-300 mb-4">
+                    <span className="mr-4">{property.bedrooms} bed, {property.bathrooms} bath</span>
+                    <span>{property.area}</span>
+                  </div>
+                  <div className="text-sm text-gray-400 mb-2">{property.location}</div>
+                  {property.developer && <div className="text-sm text-gray-400">Developer: {property.developer}</div>}
                 </div>
               </div>
             ))}
@@ -386,24 +673,23 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-dark-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-900/20 to-gold-900/20"></div>
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center mb-16 animate-fade-in">
+      <section className="py-20 bg-black/90 border-t border-gold-500/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
             <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Premium Services</span>
-            <h2 className="text-5xl font-bold mb-6 font-serif animate-slide-up">Exceptional Service Excellence</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">Exceptional Service Excellence</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
               Tailored luxury real estate services designed for discerning clients who demand nothing but the finest
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
-              <div key={index} className="group text-center p-8 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-gold-500/30 transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
+              <div key={service.title} className="luxury-card text-center p-8 group hover:scale-105 transition-all duration-500">
                 <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4 font-serif group-hover:text-gold-400 transition-colors">{service.title}</h3>
+                <h3 className="text-xl font-bold text-white mb-4 font-serif group-hover:text-gold-400 transition-colors">{service.title}</h3>
                 <p className="text-gray-300 leading-relaxed">{service.description}</p>
               </div>
             ))}
@@ -411,129 +697,240 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-luxury-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-luxury-600/20 to-gold-600/20"></div>
-        <div className="container mx-auto px-4 relative">
-          <div className="text-center mb-16 animate-fade-in">
+      {/* Achievements Section */}
+      <section className="py-20 bg-black/95 border-t border-gold-500/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
             <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Achievements</span>
-            <h2 className="text-5xl font-bold mb-6 font-serif text-white animate-slide-up">Excellence in Numbers</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
-              Trusted by thousands of clients across Dubai's luxury real estate market
-            </p>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">Excellence in Numbers</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Our track record speaks for itself - delivering exceptional results for our clients</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-8">
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {achievements.map((achievement, index) => (
-              <div key={index} className="text-center group animate-fade-in" style={{animationDelay: `${index * 0.1}s`}}>
-                <div className="mb-6 group-hover:scale-110 group-hover:-translate-y-2 transition-all duration-500">
+              <div key={achievement.label} className="luxury-card text-center p-8 group hover:scale-105 transition-all duration-500">
+                <div className="mb-6 group-hover:scale-110 transition-transform duration-300">
                   {achievement.icon}
                 </div>
-                <div className="text-4xl font-bold text-gold-400 mb-2 font-serif">
+                <div className="text-4xl font-bold text-gold-400 mb-2">
                   {achievement.number}{achievement.suffix}
                 </div>
-                <h3 className="text-lg font-semibold text-white">{achievement.label}</h3>
+                <h3 className="text-lg font-semibold text-white group-hover:text-gold-400 transition-colors">{achievement.label}</h3>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-20 bg-white">
+      {/* Blog Section */}
+      <section className="py-20 bg-black/95 border-t border-gold-500/20">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-16 animate-fade-in">
-              <h2 className="text-5xl font-bold text-dark-800 mb-6 font-serif animate-slide-up">Get in Touch</h2>
-              <p className="text-xl text-dark-600 animate-slide-up" style={{animationDelay: '0.2s'}}>Ready to find your dream property? Contact our expert team today.</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-12">
-              <div className="animate-fade-in" style={{animationDelay: '0.3s'}}>
-                <h3 className="text-2xl font-bold text-dark-800 mb-6">Contact Information</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center animate-fade-in" style={{animationDelay: '0.4s'}}>
-                    <div className="w-12 h-12 bg-luxury-600 rounded-lg flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-dark-800">Phone</div>
-                      <div className="text-dark-600">+971 50 123 4567</div>
-                    </div>
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Latest Insights</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">From Our Blog</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Stay updated with the latest trends and insights in Dubai's luxury real estate market</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {blogPosts.map((post) => (
+              <Link key={post.id} to={`/blog/${post.id}`} className="block">
+                <article className="luxury-card overflow-hidden group cursor-pointer">
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={post.image} 
+                      alt={post.title}
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-300"></div>
                   </div>
                   
-                  <div className="flex items-center animate-fade-in" style={{animationDelay: '0.5s'}}>
-                    <div className="w-12 h-12 bg-luxury-600 rounded-lg flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                      </svg>
+                  <div className="p-6">
+                    <div className="flex items-center text-gold-400 text-sm mb-3">
+                      <span>{post.category}</span>
+                      <span className="mx-2">•</span>
+                      <span>{post.date}</span>
                     </div>
-                    <div>
-                      <div className="font-semibold text-dark-800">Email</div>
-                      <div className="text-dark-600">info@amzproperties.com</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center animate-fade-in" style={{animationDelay: '0.6s'}}>
-                    <div className="w-12 h-12 bg-luxury-600 rounded-lg flex items-center justify-center mr-4">
-                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-dark-800">Address</div>
-                      <div className="text-dark-600">Dubai Marina, UAE</div>
+                    <h3 className="text-white font-semibold text-lg mb-3 group-hover:text-gold-400 transition-colors">{post.title}</h3>
+                    <p className="text-gray-300 text-sm leading-relaxed mb-4">{post.excerpt}</p>
+                    <div className="flex items-center text-gold-400 text-sm font-medium group-hover:text-gold-300 transition-colors">
+                      Read More <span className="ml-2 text-xs">→</span>
                     </div>
                   </div>
-                </div>
-              </div>
-              
-              <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
-                <form className="space-y-6">
-                  <div className="animate-slide-up" style={{animationDelay: '0.5s'}}>
-                    <input
-                      type="text"
-                      placeholder="Your Name"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxury-600 focus:border-transparent transition-all duration-300 hover:border-luxury-400"
-                    />
-                  </div>
-                  <div className="animate-slide-up" style={{animationDelay: '0.6s'}}>
-                    <input
-                      type="email"
-                      placeholder="Your Email"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxury-600 focus:border-transparent transition-all duration-300 hover:border-luxury-400"
-                    />
-                  </div>
-                  <div className="animate-slide-up" style={{animationDelay: '0.7s'}}>
-                    <input
-                      type="tel"
-                      placeholder="Your Phone"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxury-600 focus:border-transparent transition-all duration-300 hover:border-luxury-400"
-                    />
-                  </div>
-                  <div className="animate-slide-up" style={{animationDelay: '0.8s'}}>
-                    <textarea
-                      rows={4}
-                      placeholder="Your Message"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-luxury-600 focus:border-transparent transition-all duration-300 hover:border-luxury-400"
-                    ></textarea>
-                  </div>
-                  <div className="animate-slide-up" style={{animationDelay: '0.9s'}}>
-                    <button
-                      type="submit"
-                      className="w-full bg-gradient-to-r from-luxury-600 to-gold-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-luxury-700 hover:to-gold-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                    >
-                      Send Message
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
+                </article>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* Client Reviews Section */}
+      <section className="py-20 bg-black/95 border-t border-gold-500/20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">CLIENT REVIEWS</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gold-400 mb-6 font-serif">What Our Clients Say</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">Hear from our satisfied clients about their exceptional experience with AMZ Properties</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {(reviews.length > 0 ? reviews : staticTestimonials).map((review) => (
+              <div key={review.id} className="luxury-card p-8 text-center group hover:scale-105 transition-all duration-500">
+                <div className="mb-6">
+                  <img 
+                    src={review.avatar || review.image} 
+                    alt={review.name}
+                    className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-2 border-gold-400"
+                  />
+                  <div className="flex justify-center mb-4">
+                    {[...Array(review.rating || 5)].map((_, i) => (
+                      <svg key={i} className="w-5 h-5 text-gold-400 fill-current" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    ))}
+                  </div>
+                </div>
+                <blockquote className="text-gray-300 italic mb-6 leading-relaxed">
+                  "{review.message || review.text}"
+                </blockquote>
+                <div className="text-white font-semibold">{review.name}</div>
+                <div className="text-gold-400 text-sm">{review.position || review.role}</div>
+                {review.company && <div className="text-gray-400 text-xs mt-1">{review.company}</div>}
+              </div>
+            ))}
+          </div>
+          
+          {/* Review Submission Form */}
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-gold-400 mb-4 font-serif">Share Your Experience</h3>
+              <p className="text-gray-300">We'd love to hear about your experience with AMZ Properties</p>
+            </div>
+            
+            <form onSubmit={handleReviewSubmit} className="luxury-card p-8">
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <label className="block text-gold-400 font-medium mb-2">Full Name *</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={reviewForm.name}
+                    onChange={handleReviewInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gold-400 font-medium mb-2">Email Address *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={reviewForm.email}
+                    onChange={handleReviewInputChange}
+                    required
+                    className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                    placeholder="Enter your email"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                <div>
+                  <label className="block text-gold-400 font-medium mb-2">Rating *</label>
+                  <select
+                    name="rating"
+                    value={reviewForm.rating}
+                    onChange={handleReviewInputChange}
+                    className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                  >
+                    <option value={5}>5 Stars - Excellent</option>
+                    <option value={4}>4 Stars - Very Good</option>
+                    <option value={3}>3 Stars - Good</option>
+                    <option value={2}>2 Stars - Fair</option>
+                    <option value={1}>1 Star - Poor</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gold-400 font-medium mb-2">Property Type</label>
+                  <select
+                    name="propertyType"
+                    value={reviewForm.propertyType}
+                    onChange={handleReviewInputChange}
+                    className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                  >
+                    <option value="Villa">Villa</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="Penthouse">Penthouse</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Studio">Studio</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gold-400 font-medium mb-2">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={reviewForm.location}
+                    onChange={handleReviewInputChange}
+                    className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                    placeholder="Property location"
+                  />
+                </div>
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-gold-400 font-medium mb-2">Review Title *</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={reviewForm.title}
+                  onChange={handleReviewInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                  placeholder="Brief title for your review"
+                />
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-gold-400 font-medium mb-2">Your Review *</label>
+                <textarea
+                  name="message"
+                  value={reviewForm.message}
+                  onChange={handleReviewInputChange}
+                  required
+                  rows={5}
+                  className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors resize-none"
+                  placeholder="Share your experience with AMZ Properties..."
+                ></textarea>
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-gold-400 font-medium mb-2">Company (Optional)</label>
+                <input
+                  type="text"
+                  name="company"
+                  value={reviewForm.company}
+                  onChange={handleReviewInputChange}
+                  className="w-full px-4 py-3 bg-black/50 border border-gold-500/30 rounded-lg text-white focus:outline-none focus:border-gold-400 transition-colors"
+                  placeholder="Your company name"
+                />
+              </div>
+              
+              <div className="text-center">
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-luxury-600 to-gold-500 text-white px-8 py-4 rounded-lg font-semibold hover:from-luxury-700 hover:to-gold-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Submit Review
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+
     </div>
   )
 }
