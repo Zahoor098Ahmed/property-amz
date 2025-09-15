@@ -150,25 +150,25 @@ const About = () => {
       </section>
 
       {/* Company Story */}
-      <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-black to-dark-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23f3f4f6%22%20fill-opacity%3D%220.3%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%3E%3C/circle%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
         <div className="container mx-auto px-4 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="animate-fade-in">
-              <span className="text-gold-500 font-medium tracking-wider uppercase text-sm mb-4 block">Our Journey</span>
-              <h2 className="text-5xl font-bold text-luxury-900 mb-8 font-serif animate-slide-up">Crafting Excellence Since 2009</h2>
+              <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Journey</span>
+              <h2 className="text-5xl font-bold text-white mb-8 font-serif animate-slide-up">Crafting Excellence Since 2009</h2>
               
               <div className="space-y-6 animate-slide-up" style={{animationDelay: '0.2s'}}>
-                <p className="text-xl text-gray-700 leading-relaxed">
-                  Born from a vision to redefine luxury real estate in Dubai, <span className="text-gold-600 font-semibold">AMZ Properties</span> has evolved 
+                <p className="text-xl text-gray-300 leading-relaxed">
+                  Born from a vision to redefine luxury real estate in Dubai, <span className="text-gold-400 font-semibold">AMZ Properties</span> has evolved 
                   from a boutique agency to the city's most prestigious real estate consultancy.
                 </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <p className="text-lg text-gray-400 leading-relaxed">
                   Our journey began with an unwavering commitment to excellence, transparency, and personalized service. 
                   We've cultivated relationships with Dubai's most exclusive developers and discerning clientele, 
                   establishing ourselves as the trusted advisor for luxury property investments.
                 </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
+                <p className="text-lg text-gray-400 leading-relaxed">
                   Today, we continue to set new standards in the industry, leveraging cutting-edge technology 
                   and market insights to deliver exceptional results for our valued clients.
                 </p>
@@ -198,9 +198,9 @@ const About = () => {
               </div>
               
               {/* Floating stats cards */}
-              <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-2xl shadow-xl border border-gray-100 animate-float">
-                <div className="text-4xl font-bold text-gold-500 font-serif">{counters.experience}+</div>
-                <div className="text-gray-600 font-medium">Years of Excellence</div>
+              <div className="absolute -bottom-8 -left-8 bg-dark-800 p-6 rounded-2xl shadow-xl border border-gold-500/20 animate-float">
+                <div className="text-4xl font-bold text-gold-400 font-serif">{counters.experience}+</div>
+                <div className="text-gray-300 font-medium">Years of Excellence</div>
               </div>
               
               <div className="absolute -top-8 -right-8 bg-luxury-900 text-white p-6 rounded-2xl shadow-xl animate-float" style={{animationDelay: '1s'}}>
@@ -259,20 +259,20 @@ const About = () => {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-32 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-black to-dark-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23f3f4f6%22%20fill-opacity%3D%220.3%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%221%22%3E%3C/circle%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-20 animate-fade-in">
-            <span className="text-gold-500 font-medium tracking-wider uppercase text-sm mb-4 block">Our Purpose</span>
-            <h2 className="text-5xl font-bold text-luxury-900 mb-6 font-serif animate-slide-up">Mission & Vision</h2>
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Purpose</span>
+            <h2 className="text-5xl font-bold text-white mb-6 font-serif animate-slide-up">Mission & Vision</h2>
             <div className="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mb-8 animate-scale-in"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
               Driven by purpose, guided by excellence, and committed to transforming dreams into reality
             </p>
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div className="group bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-white/50 hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <div className="group bg-dark-800/90 backdrop-blur-sm p-10 rounded-3xl shadow-2xl border border-gold-500/20 hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-2 animate-fade-in" style={{animationDelay: '0.3s'}}>
               <div className="relative mb-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-luxury-500 to-luxury-700 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                   <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -281,13 +281,13 @@ const About = () => {
                 </div>
                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-gold-400 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
               </div>
-              <h3 className="text-3xl font-bold text-luxury-900 mb-6 font-serif group-hover:text-luxury-700 transition-colors duration-300">Our Mission</h3>
-              <p className="text-lg text-gray-700 leading-relaxed group-hover:text-gray-600 transition-colors duration-300">
-                To provide <span className="text-gold-600 font-semibold">exceptional real estate services</span> that exceed our clients' expectations, 
+              <h3 className="text-3xl font-bold text-white mb-6 font-serif group-hover:text-gold-400 transition-colors duration-300">Our Mission</h3>
+              <p className="text-lg text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">
+                To provide <span className="text-gold-400 font-semibold">exceptional real estate services</span> that exceed our clients' expectations, 
                 while maintaining the highest standards of integrity, professionalism, and market expertise. 
                 We strive to make every property transaction smooth, transparent, and successful.
               </p>
-              <div className="mt-8 flex items-center text-gold-600 font-medium group-hover:text-gold-700 transition-colors duration-300">
+              <div className="mt-8 flex items-center text-gold-400 font-medium group-hover:text-gold-300 transition-colors duration-300">
                 <span>Excellence in Service</span>
                 <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -322,21 +322,21 @@ const About = () => {
       </section>
 
       {/* Team Section */}
-      <section className="py-32 bg-gradient-to-br from-luxury-50 to-gray-100 relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-black to-dark-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23d4af37%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M0%200h40v40H0V0zm40%2040h40v40H40V40z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-20 animate-fade-in">
-            <span className="text-gold-500 font-medium tracking-wider uppercase text-sm mb-4 block">Our Experts</span>
-            <h2 className="text-5xl font-bold text-luxury-900 mb-6 font-serif animate-slide-up">Meet Our Team</h2>
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Experts</span>
+            <h2 className="text-5xl font-bold text-white mb-6 font-serif animate-slide-up">Meet Our Team</h2>
             <div className="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mb-8 animate-scale-in"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
-              Our experienced professionals are dedicated to providing you with <span className="text-gold-600 font-semibold">exceptional service</span> and unmatched expertise
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
+              Our experienced professionals are dedicated to providing you with <span className="text-gold-400 font-semibold">exceptional service</span> and unmatched expertise
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {teamMembers.map((member, index) => (
-              <div key={index} className="group bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-white/50" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
+              <div key={index} className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
                 <div className="relative overflow-hidden">
                   <div className="aspect-w-1 aspect-h-1">
                     <img 
@@ -368,10 +368,10 @@ const About = () => {
                 </div>
                 <div className="p-8 relative">
                   <div className="absolute top-0 left-8 w-16 h-1 bg-gradient-to-r from-gold-400 to-gold-600 transform -translate-y-1"></div>
-                  <h3 className="text-2xl font-bold text-luxury-900 mb-2 font-serif group-hover:text-luxury-700 transition-colors duration-300">{member.name}</h3>
-                  <p className="text-gold-600 font-semibold mb-4 text-lg group-hover:text-gold-700 transition-colors duration-300">{member.position}</p>
-                  <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">{member.description}</p>
-                  <div className="mt-6 flex items-center text-luxury-600 font-medium opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                  <h3 className="text-2xl font-bold text-white mb-2 font-serif group-hover:text-gold-400 transition-colors duration-300">{member.name}</h3>
+                  <p className="text-gold-400 font-semibold mb-4 text-lg group-hover:text-gold-300 transition-colors duration-300">{member.position}</p>
+                  <p className="text-gray-300 leading-relaxed group-hover:text-gray-200 transition-colors duration-300">{member.description}</p>
+                  <div className="mt-6 flex items-center text-gold-400 font-medium opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
                     <span>View Profile</span>
                     <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -385,15 +385,15 @@ const About = () => {
       </section>
 
       {/* Values Section */}
-      <section className="py-32 bg-gradient-to-br from-white to-luxury-50 relative overflow-hidden">
+      <section className="py-32 bg-gradient-to-br from-black to-dark-900 relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23d4af37%22%20fill-opacity%3D%220.08%22%3E%3Cpolygon%20points%3D%2230%200%2060%2030%2030%2060%200%2030%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
         <div className="container mx-auto px-4 relative">
           <div className="text-center mb-20 animate-fade-in">
-            <span className="text-gold-500 font-medium tracking-wider uppercase text-sm mb-4 block">Our Foundation</span>
-            <h2 className="text-5xl font-bold text-luxury-900 mb-6 font-serif animate-slide-up">Our Values</h2>
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Foundation</span>
+            <h2 className="text-5xl font-bold text-white mb-6 font-serif animate-slide-up">Our Values</h2>
             <div className="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mb-8 animate-scale-in"></div>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
-              The <span className="text-gold-600 font-semibold">principles that guide</span> everything we do and define who we are
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
+              The <span className="text-gold-400 font-semibold">principles that guide</span> everything we do and define who we are
             </p>
           </div>
           
