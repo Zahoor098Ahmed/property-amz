@@ -2,6 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropertyManager from './PropertyManager'
 import ContactManager from './ContactManager'
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+import ReviewManager from './ReviewManager'
+import ContentManager from './ContentManager'
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -126,6 +134,18 @@ const AdminDashboard = () => {
       
       case 'contact':
         return <ContactManager />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      
+      case 'reviews':
+        return <ReviewManager />
+      
+      case 'content':
+        return <ContentManager />
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
       default:
         return null
@@ -200,6 +220,36 @@ const AdminDashboard = () => {
                     Contact
                   </button>
                 </li>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+                <li>
+                  <button
+                    onClick={() => setActiveTab('reviews')}
+                    className={`w-full text-left px-4 py-2 rounded-md ${
+                      activeTab === 'reviews'
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    Reviews
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setActiveTab('content')}
+                    className={`w-full text-left px-4 py-2 rounded-md ${
+                      activeTab === 'content'
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    Content
+                  </button>
+                </li>
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
               </ul>
             </div>

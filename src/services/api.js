@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 const API_BASE_URL = '/api';
+=======
+<<<<<<< HEAD
+const API_BASE_URL = '/api';
+=======
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
 // API service for making HTTP requests
 class ApiService {
@@ -13,6 +21,10 @@ class ApiService {
     const separator = endpoint.includes('?') ? '&' : '?';
     const url = `${API_BASE_URL}${endpoint}${separator}${cacheBuster}`;
     
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -21,8 +33,36 @@ class ApiService {
         'Expires': '0',
         ...(options.headers || {}),
       },
+=======
+    const headers = {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+      ...(options.headers || {}),
+    };
+    
+    // Add Content-Type if not FormData
+    if (!options.isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
+    
+    // Add authentication token if required
+    if (options.requiresAuth) {
+      const adminToken = localStorage.getItem('adminToken');
+      if (adminToken) {
+        headers['Authorization'] = `Bearer ${adminToken}`;
+      }
+    }
+    
+    const config = {
+      headers,
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
       ...options,
     };
+    
+    // Remove custom options from config
+    delete config.requiresAuth;
+    delete config.isFormData;
 
     try {
       console.log(`API Request to: ${url}`, config);
@@ -516,6 +556,146 @@ class ApiService {
         'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
       }
     });
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+  }
+
+  // Projects API methods
+  async getProjects(filters = {}) {
+    const queryParams = new URLSearchParams();
+    
+    Object.keys(filters).forEach(key => {
+      if (filters[key] && filters[key] !== 'all') {
+        queryParams.append(key, filters[key]);
+      }
+    });
+    
+    const queryString = queryParams.toString();
+    const endpoint = `/projects${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request(endpoint);
+  }
+
+  async getProjectById(id) {
+    if (!id) {
+      throw new Error('Project ID is required');
+    }
+    return this.request(`/projects/${id}`);
+  }
+
+  async createProject(projectData) {
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+    };
+    
+    const requestOptions = {
+      method: 'POST',
+      headers
+    };
+    
+    if (projectData instanceof FormData) {
+      requestOptions.body = projectData;
+    } else {
+      headers['Content-Type'] = 'application/json';
+      requestOptions.body = JSON.stringify(projectData);
+    }
+    
+    return this.request('/projects', requestOptions);
+  }
+
+  async updateProject(id, projectData) {
+    if (!id) {
+      throw new Error('Project ID is required for update');
+    }
+    
+    const headers = {
+      'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+    };
+    
+    const requestOptions = {
+      method: 'PUT',
+      headers
+    };
+    
+    if (projectData instanceof FormData) {
+      requestOptions.body = projectData;
+    } else {
+      headers['Content-Type'] = 'application/json';
+      requestOptions.body = JSON.stringify(projectData);
+    }
+    
+    return this.request(`/projects/${id}`, requestOptions);
+  }
+
+  async deleteProject(id) {
+    if (!id) {
+      throw new Error('Project ID is required for deletion');
+    }
+    
+    return this.request(`/projects/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+      }
+    });
+  }
+
+  // Testimonials API methods
+  async getTestimonials(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/testimonials${queryString ? `?${queryString}` : ''}`);
+  }
+
+  async getTestimonialById(id) {
+    return this.request(`/testimonials/${id}`);
+  }
+
+  async createTestimonial(testimonialData, isFormData = false) {
+    const options = {
+      method: 'POST',
+      requiresAuth: true
+    };
+
+    if (isFormData) {
+      options.body = testimonialData;
+    } else {
+      options.body = JSON.stringify(testimonialData);
+    }
+
+    return this.request('/testimonials', options);
+  }
+
+  async updateTestimonial(id, testimonialData, isFormData = false) {
+    const options = {
+      method: 'PUT',
+      requiresAuth: true
+    };
+
+    if (isFormData) {
+      options.body = testimonialData;
+    } else {
+      options.body = JSON.stringify(testimonialData);
+    }
+
+    return this.request(`/testimonials/${id}`, options);
+  }
+
+  async deleteTestimonial(id) {
+    return this.request(`/testimonials/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  async toggleTestimonialStatus(id) {
+    return this.request(`/testimonials/${id}/toggle-status`, {
+      method: 'PATCH',
+      requiresAuth: true
+    });
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
   }
 
   // Health check
@@ -543,6 +723,152 @@ class ApiService {
       throw error;
     }
   }
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+  // Admin Partners Management
+  async getAdminPartners(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/partners${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminPartner(partnerData) {
+    return this.request('/admin/partners', {
+      method: 'POST',
+      body: JSON.stringify(partnerData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminPartner(id, partnerData) {
+    return this.request(`/admin/partners/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(partnerData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminPartner(id) {
+    return this.request(`/admin/partners/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Testimonials Management
+  async getAdminTestimonials(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/testimonials${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminTestimonial(testimonialData) {
+    return this.request('/admin/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(testimonialData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminTestimonial(id, testimonialData) {
+    return this.request(`/admin/testimonials/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(testimonialData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminTestimonial(id) {
+    return this.request(`/admin/testimonials/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Blogs Management
+  async getAdminBlogs(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/blogs${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminBlog(blogData) {
+    return this.request('/admin/blogs', {
+      method: 'POST',
+      body: JSON.stringify(blogData),
+      requiresAuth: true
+    });
+  }
+
+  async updateAdminBlog(id, blogData) {
+    return this.request(`/admin/blogs/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(blogData),
+      requiresAuth: true
+    });
+  }
+
+  async deleteAdminBlog(id) {
+    return this.request(`/admin/blogs/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+
+  // Admin Properties Management
+  async getAdminProperties(params = {}) {
+    const queryString = new URLSearchParams(params).toString();
+    return this.request(`/admin/properties${queryString ? `?${queryString}` : ''}`, {
+      requiresAuth: true
+    });
+  }
+
+  async createAdminProperty(propertyData, isFormData = false) {
+    const options = {
+      method: 'POST',
+      requiresAuth: true
+    };
+    
+    if (isFormData) {
+      options.body = propertyData;
+      options.isFormData = true;
+    } else {
+      options.body = JSON.stringify(propertyData);
+    }
+    
+    return this.request('/admin/properties', options);
+  }
+
+  async updateAdminProperty(id, propertyData, isFormData = false) {
+    const options = {
+      method: 'PUT',
+      requiresAuth: true
+    };
+    
+    if (isFormData) {
+      options.body = propertyData;
+      options.isFormData = true;
+    } else {
+      options.body = JSON.stringify(propertyData);
+    }
+    
+    return this.request(`/admin/properties/${id}`, options);
+  }
+
+  async deleteAdminProperty(id) {
+    return this.request(`/admin/properties/${id}`, {
+      method: 'DELETE',
+      requiresAuth: true
+    });
+  }
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 }
 
 // Create and export a singleton instance
@@ -577,6 +903,43 @@ export const {
   createPartner,
   updatePartner,
   deletePartner,
+<<<<<<< HEAD
   healthCheck,
   adminLogin
+=======
+<<<<<<< HEAD
+  healthCheck,
+  adminLogin
+=======
+  getProjects,
+  getProjectById,
+  createProject,
+  updateProject,
+  deleteProject,
+  getTestimonials,
+  getTestimonialById,
+  createTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  toggleTestimonialStatus,
+  healthCheck,
+  adminLogin,
+  getAdminPartners,
+  createAdminPartner,
+  updateAdminPartner,
+  deleteAdminPartner,
+  getAdminTestimonials,
+  createAdminTestimonial,
+  updateAdminTestimonial,
+  deleteAdminTestimonial,
+  getAdminBlogs,
+  createAdminBlog,
+  updateAdminBlog,
+  deleteAdminBlog,
+  getAdminProperties,
+  createAdminProperty,
+  updateAdminProperty,
+  deleteAdminProperty
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 } = apiService;

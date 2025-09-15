@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+<<<<<<< HEAD
 import { apiService } from '../../services/api'
+=======
+<<<<<<< HEAD
+import { apiService } from '../../services/api'
+=======
+import { getAdminBlogs, createAdminBlog, updateAdminBlog, deleteAdminBlog } from '../../services/api'
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
 const BlogManagement = () => {
   const [blogs, setBlogs] = useState([])
@@ -35,7 +43,15 @@ const BlogManagement = () => {
 
   const fetchBlogs = async () => {
     try {
+<<<<<<< HEAD
       const response = await apiService.getBlogs({ status: 'all' })
+=======
+<<<<<<< HEAD
+      const response = await apiService.getBlogs({ status: 'all' })
+=======
+      const response = await getAdminBlogs({ status: 'all' })
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       if (response.blogs) {
         setBlogs(response.blogs || [])
       } else {
@@ -77,9 +93,21 @@ const BlogManagement = () => {
 
       let response
       if (editingBlog) {
+<<<<<<< HEAD
         response = await apiService.updateBlog(editingBlog._id, submitData)
       } else {
         response = await apiService.createBlog(submitData)
+=======
+<<<<<<< HEAD
+        response = await apiService.updateBlog(editingBlog._id, submitData)
+      } else {
+        response = await apiService.createBlog(submitData)
+=======
+        response = await updateAdminBlog(editingBlog._id, submitData)
+      } else {
+        response = await createAdminBlog(submitData)
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       }
 
       if (response.success) {
@@ -121,7 +149,15 @@ const BlogManagement = () => {
     }
 
     try {
+<<<<<<< HEAD
       const response = await apiService.deleteBlog(blogId)
+=======
+<<<<<<< HEAD
+      const response = await apiService.deleteBlog(blogId)
+=======
+      const response = await deleteAdminBlog(blogId)
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       
       if (response.success) {
         toast.success('Blog deleted successfully')

@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
+<<<<<<< HEAD
 import { apiService } from '../../services/api'
+=======
+<<<<<<< HEAD
+import { apiService } from '../../services/api'
+=======
+import { getAdminPartners, createAdminPartner, updateAdminPartner, deleteAdminPartner } from '../../services/api'
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
 const PartnerManagement = () => {
   const [partners, setPartners] = useState([])
@@ -47,7 +55,15 @@ const PartnerManagement = () => {
 
   const fetchPartners = async () => {
     try {
+<<<<<<< HEAD
       const response = await apiService.getPartners({ status: 'all' })
+=======
+<<<<<<< HEAD
+      const response = await apiService.getPartners({ status: 'all' })
+=======
+      const response = await getAdminPartners({ status: 'all' })
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       if (response.partners) {
         setPartners(response.partners || [])
       } else {
@@ -105,9 +121,21 @@ const PartnerManagement = () => {
 
       let response
       if (editingPartner) {
+<<<<<<< HEAD
         response = await apiService.updatePartner(editingPartner._id, submitData)
       } else {
         response = await apiService.createPartner(submitData)
+=======
+<<<<<<< HEAD
+        response = await apiService.updatePartner(editingPartner._id, submitData)
+      } else {
+        response = await apiService.createPartner(submitData)
+=======
+        response = await updateAdminPartner(editingPartner._id, submitData)
+      } else {
+        response = await createAdminPartner(submitData)
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       }
 
       if (response.success) {
@@ -169,7 +197,15 @@ const PartnerManagement = () => {
     }
 
     try {
+<<<<<<< HEAD
       const response = await apiService.deletePartner(partnerId)
+=======
+<<<<<<< HEAD
+      const response = await apiService.deletePartner(partnerId)
+=======
+      const response = await deleteAdminPartner(partnerId)
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       
       if (response.success) {
         toast.success('Partner deleted successfully')

@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import PropertyForm from './PropertyForm'
 import PropertyList from './PropertyList'
+<<<<<<< HEAD
 import apiService from '../../services/api'
+=======
+<<<<<<< HEAD
+import apiService from '../../services/api'
+=======
+import { getAdminProperties, createAdminProperty, updateAdminProperty, deleteAdminProperty } from '../../services/api'
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
 
 const PropertyManagement = () => {
   const [properties, setProperties] = useState([])
@@ -17,15 +25,35 @@ const PropertyManagement = () => {
 
   const fetchProperties = async () => {
     try {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       const data = await apiService.getProperties()
       
       if (data.success) {
         setProperties(data.data)
+<<<<<<< HEAD
+=======
+=======
+      const data = await getAdminProperties()
+      
+      if (data.success) {
+        setProperties(data.properties || [])
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       } else {
         toast.error('Failed to fetch properties')
       }
     } catch (error) {
+<<<<<<< HEAD
       console.error('Error fetching properties:', error)
+=======
+<<<<<<< HEAD
+      console.error('Error fetching properties:', error)
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       toast.error('Error fetching properties')
     } finally {
       setLoading(false)
@@ -49,7 +77,15 @@ const PropertyManagement = () => {
 
     try {
       console.log('Deleting property with ID:', propertyId)
+<<<<<<< HEAD
       const response = await apiService.deleteProperty(propertyId)
+=======
+<<<<<<< HEAD
+      const response = await apiService.deleteProperty(propertyId)
+=======
+      const response = await deleteAdminProperty(propertyId)
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       console.log('Delete response:', response)
 
       if (response && response.success) {
@@ -74,15 +110,36 @@ const PropertyManagement = () => {
       
       if (editingProperty) {
         console.log('Updating property with ID:', editingProperty._id, 'Data:', propertyData);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
         response = await apiService.updateProperty(editingProperty._id, propertyData, isFormData);
       } else {
         console.log('Creating new property, Data:', propertyData);
         response = await apiService.createProperty(propertyData, isFormData);
+<<<<<<< HEAD
+=======
+=======
+        response = await updateAdminProperty(editingProperty._id, propertyData, isFormData);
+      } else {
+        console.log('Creating new property, Data:', propertyData);
+        response = await createAdminProperty(propertyData, isFormData);
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       }
 
       console.log('API Response:', response);
       
+<<<<<<< HEAD
       if (response && response.success) {
+=======
+<<<<<<< HEAD
+      if (response && response.success) {
+=======
+      if (response && (response.success || response.property)) {
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
         toast.success(
           editingProperty 
             ? 'Property updated successfully' 
@@ -90,7 +147,16 @@ const PropertyManagement = () => {
         )
         setShowForm(false)
         setEditingProperty(null)
+<<<<<<< HEAD
         fetchProperties()
+=======
+<<<<<<< HEAD
+        fetchProperties()
+=======
+        // Refresh the properties list
+        await fetchProperties()
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
+>>>>>>> c4429e5a7c8975b31158b27f1f7043f28137eb34
       } else {
         toast.error((response && response.message) || 'Failed to save property')
       }
