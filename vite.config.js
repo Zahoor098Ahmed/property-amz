@@ -5,13 +5,42 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+<<<<<<< HEAD
     port: 3001,
     proxy: {
       '/api': {
         target: 'http://localhost:5003',
+=======
+    port: 3002,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5002',
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
         changeOrigin: true,
         secure: false,
       },
     },
+  },
+  optimizeDeps: {
+    include: ['react-icons/fa', 'react-icons'],
+  },
+  build: {
+    target: 'esnext',
+    cssTarget: 'chrome80',
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          icons: ['react-icons'],
+        },
+      },
+    },
+  },
+  css: {
+    postcss: './postcss.config.js',
+  },
+  esbuild: {
+    target: 'es2020',
   },
 })

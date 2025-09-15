@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import amzLogo from '../assets/amz.logo.jpeg'
+import GlobalSearch from './GlobalSearch'
+import { useWishlist } from '../contexts/WishlistContext'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const { wishlistCount } = useWishlist()
   const location = useLocation()
 
   const isActive = (path) => {
@@ -48,7 +52,7 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="flex items-center space-x-8">
             <Link 
               to="/" 
               className={`relative font-medium transition-all duration-300 group ${
@@ -73,6 +77,19 @@ const Header = () => {
               Properties
               <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-luxury-600 to-gold-500 transition-all duration-300 group-hover:w-full ${
                 isActive('/properties') ? 'w-full' : ''
+              }`}></span>
+            </Link>
+            <Link 
+              to="/projects" 
+              className={`relative font-medium transition-all duration-300 group ${
+                isActive('/projects') 
+                  ? (isScrolled ? 'text-luxury-600' : 'text-gold-300')
+                  : (isScrolled ? 'text-dark-600 hover:text-luxury-600' : 'text-white/90 hover:text-gold-300')
+              }`}
+            >
+              Projects
+              <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-luxury-600 to-gold-500 transition-all duration-300 group-hover:w-full ${
+                isActive('/projects') ? 'w-full' : ''
               }`}></span>
             </Link>
             <Link 
@@ -104,7 +121,37 @@ const Header = () => {
           </nav>
 
           {/* CTA Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
+            {/* Search Button */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className={`p-2 rounded-xl transition-all duration-300 hover:bg-white/10 backdrop-blur-sm ${
+                isScrolled ? 'text-dark-600 hover:text-luxury-600' : 'text-white/90 hover:text-gold-300'
+              }`}
+              aria-label="Search"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+            
+            {/* Wishlist Button */}
+            <Link
+              to="/wishlist"
+              className={`relative p-2 rounded-xl transition-all duration-300 hover:bg-white/10 backdrop-blur-sm ${
+                isScrolled ? 'text-dark-600 hover:text-luxury-600' : 'text-white/90 hover:text-gold-300'
+              }`}
+              aria-label="Wishlist"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
+                  {wishlistCount > 99 ? '99+' : wishlistCount}
+                </span>
+              )}
+            </Link>
             <Link 
               to="tel:+971501234567" 
               className={`flex items-center space-x-2 font-medium transition-all duration-300 ${
@@ -126,7 +173,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="lg:hidden p-2 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+            className="hidden p-2 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <svg className={`w-6 h-6 transition-colors duration-300 ${
@@ -143,7 +190,7 @@ const Header = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="lg:hidden py-6 border-t border-white/10 bg-white/95 backdrop-blur-md rounded-b-2xl mt-4 shadow-luxury">
+          <div className="hidden py-6 border-t border-white/10 bg-white/95 backdrop-blur-md rounded-b-2xl mt-4 shadow-luxury">
             <nav className="flex flex-col space-y-6">
               <Link 
                 to="/" 
@@ -166,6 +213,17 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Properties
+              </Link>
+              <Link 
+                to="/projects" 
+                className={`font-medium transition-all duration-300 px-4 py-2 rounded-xl ${
+                  isActive('/projects') 
+                    ? 'text-luxury-600 bg-luxury-50' 
+                    : 'text-dark-600 hover:text-luxury-600 hover:bg-luxury-50'
+                }`}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Projects
               </Link>
               <Link 
                 to="/about" 
@@ -212,6 +270,14 @@ const Header = () => {
           </div>
         )}
       </div>
+      
+      {/* Global Search Modal */}
+      {isSearchOpen && (
+        <GlobalSearch 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+        />
+      )}
     </header>
   )
 }

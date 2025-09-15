@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropertyManager from './PropertyManager'
 import ContactManager from './ContactManager'
+<<<<<<< HEAD
 import ReviewManager from './ReviewManager'
 import ContentManager from './ContentManager'
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard')
@@ -128,12 +131,15 @@ const AdminDashboard = () => {
       
       case 'contact':
         return <ContactManager />
+<<<<<<< HEAD
       
       case 'reviews':
         return <ReviewManager />
       
       case 'content':
         return <ContentManager />
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
 
       default:
         return null
@@ -208,6 +214,7 @@ const AdminDashboard = () => {
                     Contact
                   </button>
                 </li>
+<<<<<<< HEAD
                 <li>
                   <button
                     onClick={() => setActiveTab('reviews')}
@@ -232,6 +239,8 @@ const AdminDashboard = () => {
                     Content
                   </button>
                 </li>
+=======
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
 
               </ul>
             </div>

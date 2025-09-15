@@ -108,9 +108,18 @@ const About = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-luxury-900 via-luxury-800 to-gold-900"></div>
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-20"></div>
+        {/* Animated Background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-luxury-900 via-luxury-800 to-gold-900 animate-gradient-shift"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80')] bg-cover bg-center opacity-20 animate-ken-burns"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-luxury-900/80 via-transparent to-luxury-900/40"></div>
+        
+        {/* Floating Particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-gold-400 rounded-full animate-float opacity-60"></div>
+          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-gold-300 rounded-full animate-float opacity-40" style={{animationDelay: '2s'}}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-3 h-3 bg-gold-500 rounded-full animate-float opacity-30" style={{animationDelay: '4s'}}></div>
+          <div className="absolute top-2/3 right-1/4 w-1.5 h-1.5 bg-gold-400 rounded-full animate-float opacity-50" style={{animationDelay: '6s'}}></div>
+        </div>
         
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="animate-fade-in">
@@ -230,7 +239,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div 
-                key={index} 
+                key={`stat-${index}`} 
                 className="group text-center p-8 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 hover:border-gold-500/30 transition-all duration-500 hover:transform hover:-translate-y-4 animate-fade-in"
                 style={{animationDelay: `${index * 0.1}s`}}
               >
@@ -336,7 +345,11 @@ const About = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {teamMembers.map((member, index) => (
+<<<<<<< HEAD
               <div key={index} className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
+=======
+              <div key={`team-member-${index}`} className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: `${0.1 * (index + 1)}s`}}>
+>>>>>>> 862326b0dae02b9e946428193aebddf5819173e9
                 <div className="relative overflow-hidden">
                   <div className="aspect-w-1 aspect-h-1">
                     <img 
@@ -456,6 +469,198 @@ const About = () => {
               <p className="text-gray-700 leading-relaxed group-hover:text-gray-800 transition-colors duration-300">
                 We embrace <span className="text-blue-600 font-semibold">technology and innovative solutions</span> to enhance the real estate experience.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Developer Partnerships */}
+      <section className="py-32 bg-gradient-to-br from-luxury-900 to-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23d4af37%22%20fill-opacity%3D%220.05%22%3E%3Cpath%20d%3D%22M36%2034v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0l8%208-8%208V8h-8V4h8zM6%2034v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6%204V0l8%208-8%208V8H0V4h6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
+        <div className="container mx-auto px-4 relative">
+          <div className="text-center mb-20 animate-fade-in">
+            <span className="text-gold-400 font-medium tracking-wider uppercase text-sm mb-4 block">Our Network</span>
+            <h2 className="text-5xl font-bold text-white mb-6 font-serif animate-slide-up">Developer Partnerships</h2>
+            <div className="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mb-8 animate-scale-in"></div>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed animate-slide-up" style={{animationDelay: '0.2s'}}>
+              We collaborate with <span className="text-gold-400 font-semibold">Dubai's most prestigious developers</span> to bring you exclusive access to premium properties
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {/* Emaar Properties */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.1s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-luxury-600 to-luxury-800 flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white font-serif">EMAAR</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-luxury-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">Emaar Properties</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  Dubai's leading developer behind iconic projects like Burj Khalifa, Dubai Mall, and Downtown Dubai.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Downtown Dubai</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Dubai Hills</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Emirates Living</span>
+                </div>
+              </div>
+            </div>
+
+            {/* DAMAC Properties */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.2s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-gold-600 to-gold-800 flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white font-serif">DAMAC</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gold-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">DAMAC Properties</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  Luxury real estate developer known for premium residential and commercial projects across Dubai.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">DAMAC Hills</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Business Bay</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">JLT</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Dubai Properties */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.3s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
+                  <div className="text-3xl font-bold text-white font-serif text-center">DUBAI<br/>PROPERTIES</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">Dubai Properties</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  Government-backed developer creating master-planned communities and iconic developments.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Jumeirah Beach Residence</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Business Bay</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Sobha Realty */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.4s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-green-600 to-green-800 flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white font-serif">SOBHA</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">Sobha Realty</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  International luxury real estate developer known for premium craftsmanship and attention to detail.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Mohammed Bin Rashid City</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Dubai Hills Estate</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Meraas */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.5s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white font-serif">MERAAS</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">Meraas</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  Dubai-based holding company creating innovative lifestyle destinations and premium developments.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Bluewaters Island</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">City Walk</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Nakheel */}
+            <div className="group bg-dark-800/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-all duration-500 hover:transform hover:-translate-y-3 animate-fade-in border border-gold-500/20" style={{animationDelay: '0.6s'}}>
+              <div className="relative overflow-hidden">
+                <div className="h-48 bg-gradient-to-br from-teal-600 to-teal-800 flex items-center justify-center">
+                  <div className="text-4xl font-bold text-white font-serif">NAKHEEL</div>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-teal-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+              <div className="p-8">
+                <h3 className="text-2xl font-bold text-white mb-3 font-serif group-hover:text-gold-400 transition-colors duration-300">Nakheel</h3>
+                <p className="text-gray-300 leading-relaxed mb-4 group-hover:text-gray-200 transition-colors duration-300">
+                  Master developer behind iconic projects including Palm Jumeirah and The World Islands.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Palm Jumeirah</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">The World</span>
+                  <span className="bg-gold-500/20 text-gold-400 px-3 py-1 rounded-full text-sm">Dragon City</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Partnership Benefits */}
+          <div className="bg-gradient-to-br from-dark-800/90 to-luxury-900/90 backdrop-blur-sm rounded-3xl p-12 border border-gold-500/20 animate-fade-in" style={{animationDelay: '0.7s'}}>
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-white mb-4 font-serif">Partnership Benefits</h3>
+              <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                Our strategic partnerships provide you with <span className="text-gold-400 font-semibold">exclusive advantages</span>
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors duration-300">Exclusive Access</h4>
+                <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">First access to new launches and premium units</p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-to-br from-luxury-500 to-luxury-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors duration-300">Special Pricing</h4>
+                <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Competitive rates and exclusive payment plans</p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors duration-300">Direct Support</h4>
+                <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Direct communication with developer teams</p>
+              </div>
+              
+              <div className="text-center group">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-gold-400 transition-colors duration-300">Quality Assurance</h4>
+                <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors duration-300">Guaranteed quality and timely delivery</p>
+              </div>
             </div>
           </div>
         </div>
